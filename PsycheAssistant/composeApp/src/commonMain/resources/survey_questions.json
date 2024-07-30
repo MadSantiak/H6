@@ -1,0 +1,100 @@
+[
+  {
+    "id": 1,
+    "question": "Have you felt fatigued during the past month? It does not matter if the fatigue is physical (muscular) or mental. If you recently experienced something unusual (for example an accident or short illness) you should try to disregard it when assessing your fatigue.",
+    "type": "numeric",
+    "value": 0,
+    "surveyModel":null
+  },
+  {
+    "id": 2,
+    "question": "Do you find it difficult to start things? Do you experience resistance or a lack of initiative when you have to start something, no matter whether it is a new task or part of your everyday activities?",
+    "type": "numeric",
+    "value": 0,
+    "surveyModel": null
+  },
+  {
+    "id": 3,
+    "question": "Does your brain become fatigued quickly when you have to think hard? Do you become mentally fatigued from things such as reading, watching TV or taking part in a conversation with several people? Do you have to take breaks or change to another activity?",
+    "type": "numeric",
+    "value": 0,
+    "surveyModel": null
+  },
+  {
+    "id": 4,
+    "question": "Do you need to rest a little (less than 1 hour) or a lot (more than 1 day) to recover after working until you are either exhausted or can no longer focus?",
+    "type": "numeric",
+    "value": 0,
+    "surveyModel": null
+  },
+  {
+    "id": 5,
+    "question": "Do you find it difficult to gather your thoughts and concentrate?",
+    "type": "numeric",
+    "value": 0,
+    "surveyModel": null
+  },
+  {
+    "id": 6,
+    "question": "Do you forget things more often than before, do you need to make notes or do you have to search for things at home or at work?",
+    "type": "numeric",
+    "value": 0,
+    "surveyModel": null
+  },
+  {
+    "id": 7,
+    "question": "Do you feel slow or sluggish when you think about something? Do you feel that it takes an unusually long time to conclude a train of thought or solve a task that requires mental effort?",
+    "type": "numeric",
+    "value": 0,
+    "surveyModel": null
+  },
+  {
+    "id": 8,
+    "question": "Do you find it difficult to cope with stress that is, doing several things at the same time while under time pressure?",
+    "type": "numeric",
+    "value": 0,
+    "surveyModel": null
+  },
+  {
+    "id": 9,
+    "question": "Do you find that you cry more easily than previously? Do you often burst into tears when, for example, you watch a sad film or talk with your family members? If you recently experienced something unusual (e.g. an accident or short illness) you should try to disregard it in your assessment.",
+    "type": "numeric",
+    "value": 0,
+    "surveyModel": null
+  },
+  {
+    "id": 10,
+    "question": "Are you unusually short-tempered or irritable about things that previously did not bother you?",
+    "type": "numeric",
+    "value": 0,
+    "surveyModel": null
+  },
+  {
+    "id": 11,
+    "question": "Are you sensitive to strong light?",
+    "type": "numeric",
+    "value": 0,
+    "surveyModel": null
+  },
+  {
+    "id": 12,
+    "question": "Are you sensitive to noise?",
+    "type": "numeric",
+    "value": 0,
+    "surveyModel": null
+  },
+  {
+    "id": 13,
+    "question": "Do you sleep badly at night?",
+    "type": "numeric",
+    "value": 0,
+    "surveyModel": null
+  },
+  {
+    "id": 14,
+    "question": "Do you sleep longer and/or more deeply than before?",
+    "type": "numeric",
+    "value": 0,
+    "surveyModel": null
+  }
+]
