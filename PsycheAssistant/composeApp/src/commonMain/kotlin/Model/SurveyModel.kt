@@ -1,6 +1,7 @@
 package org.psyche.assistant.Model
 
 import kotlinx.serialization.Serializable
+import org.psyche.assistant.Model.User.User
 
 
 /**

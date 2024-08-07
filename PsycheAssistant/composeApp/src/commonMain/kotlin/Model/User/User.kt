@@ -1,4 +1,4 @@
-package org.psyche.assistant.Model
+package org.psyche.assistant.Model.User
 
 import kotlinx.serialization.Serializable
 
@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class User (
     val id: Int,
     val name: String,
-) {
-}
+    val energyExpenditure: Int,
+)
