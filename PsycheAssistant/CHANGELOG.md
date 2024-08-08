@@ -2,11 +2,19 @@
 - - -
 
 > ### Author: Mads Søndergaard 
-> ### Current version: 0.0.5
+> ### Current version: 0.1.0
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.1.0:
+> General
+> - Begun development of user integration, using external database (Spring Boot/H2) for general data storage
+> - Minor refactoring, but primarily avoiding legacy proof-of-concept code for the time being.
+
+> Android
+> - Begun development of security integration, using MMKV for Android specific secure storage.
+
 ### 0.0.5:
 > General
 > - Finetuned results page for better clarity in terms of result and user understanding.

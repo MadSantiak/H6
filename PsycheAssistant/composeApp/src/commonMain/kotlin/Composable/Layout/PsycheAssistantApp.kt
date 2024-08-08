@@ -29,8 +29,8 @@ fun PsycheAssistantApp() {
     var currentScreen by remember { mutableStateOf("main") }
     var expanded by remember { mutableStateOf(false) }
 
-    val english = stringResource(Res.string.english)
-    val danish = stringResource(Res.string.danish)
+    //val english = stringResource(Res.string.english)
+    //val danish = stringResource(Res.string.danish)
     MaterialTheme(
         /**
          * Wrap the entire contents in the custom color theme.
@@ -61,6 +61,7 @@ fun PsycheAssistantApp() {
              * Add a bottom bar which allows for selecting question-language (doesn't affect UI broadly speaking,
              * this is reserved for later development as it would have to be platform specific)
              */
+            /**
             bottomBar = {
                 BottomAppBar(
                     backgroundColor = MaterialTheme.colors.primary
@@ -95,13 +96,14 @@ fun PsycheAssistantApp() {
                     }
                 }
             },
+            */
             /**
              * Add content, changing depending on the currentScreen value.
              */
             content = { innerPadding ->
                 Column(
                     modifier = Modifier
-                        .padding(innerPadding) // Apply padding to avoid overlap
+                        .padding(innerPadding)
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
                 ) {

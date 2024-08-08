@@ -2,7 +2,7 @@ package org.psyche.assistant.Model
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import org.psyche.assistant.Helper.create
+import org.psyche.assistant.Storage.create
 
 /**
  * Repository for how to communicate with the database to allow for CRUD of SurveyModels/Survey database models.

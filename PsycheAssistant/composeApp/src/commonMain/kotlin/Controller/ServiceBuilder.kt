@@ -9,7 +9,7 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
 object ServiceBuilder {
-    private const val BASE_URL: String = "http://192.168.1.145:8080"
+    private const val BASE_URL: String = "http://192.168.1.165:8080"
     val client = HttpClient(CIO) {
         install(ContentNegotiation) {
             json(Json {

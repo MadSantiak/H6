@@ -62,6 +62,7 @@ kotlin {
             implementation("io.ktor:ktor-client-content-negotiation:2.3.3")
             implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.3")
             implementation("io.ktor:ktor-client-cio:2.3.3")
+            implementation("com.tencent:mmkv:1.2.10")
         }
         androidMain.dependencies {
             implementation(compose.preview)

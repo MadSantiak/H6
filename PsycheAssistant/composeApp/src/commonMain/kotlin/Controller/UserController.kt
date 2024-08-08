@@ -2,32 +2,41 @@ package org.psyche.assistant.Controller
 
 import io.ktor.client.*
 import io.ktor.client.request.*
-import io.ktor.client.call.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.psyche.assistant.Model.User.User
-import org.psyche.assistant.Model.User.UserRepository
+import org.psyche.assistant.Storage.AuthStorage
 
-class UserController : UserRepository {
+class UserController {
 
     private val client = ServiceBuilder.client
 
-    override suspend fun getUserId(id: Int): User {
-        val url = ServiceBuilder.url("users/$id")
-        return client.get(url).body()
+    suspend fun registerUser(email: String, password: String): String {
+        val url = ServiceBuilder.url("api/users/register")
+        val response: HttpResponse = client.post(url) {
+            contentType(ContentType.Application.FormUrlEncoded)
+            setBody("email=$email&password=$password")
+        }
+        return when (response.status) {
+            HttpStatusCode.Created -> response.bodyAsText()
+            else -> throw Exception("Failed to register user: ${response.status}")
+        }
     }
 
-    override suspend fun addUser(user: User): Int {
-        val url = ServiceBuilder.url("users")
-        val response = client.post(url) {
-            contentType(ContentType.Application.Json)
-            setBody(user)
+    suspend fun loginUser(email: String, password: String): String {
+        val url = ServiceBuilder.url("api/auth/login")
+        val response: HttpResponse = client.post(url) {
+            contentType(ContentType.Application.FormUrlEncoded)
+            setBody("email=$email&password=$password")
         }
-        if (response.status == HttpStatusCode.Created) {
-            val createdUser: User = response.body()
-            return createdUser.id
+        if (response.status == HttpStatusCode.OK) {
+            val token = response.bodyAsText()
+            AuthStorage.saveAuthToken(token) // Save the token
+            return token
         } else {
-            throw Exception("Failed to add user: ${response.status}")
+            throw Exception("Failed to login user: ${response.status}")
         }
     }
 }

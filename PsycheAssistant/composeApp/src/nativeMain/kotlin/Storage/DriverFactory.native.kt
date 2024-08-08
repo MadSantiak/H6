@@ -1,4 +1,4 @@
-package org.psyche.assistant.Database
+package org.psyche.assistant.Storage
 
 import org.psyche.assistant.PsycheAssistantDB
 

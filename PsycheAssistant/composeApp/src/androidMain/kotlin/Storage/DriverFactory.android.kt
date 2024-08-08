@@ -1,4 +1,4 @@
-package org.psyche.assistant.Helper
+package org.psyche.assistant.Storage
 
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import org.psyche.assistant.PsycheAssistantDB
