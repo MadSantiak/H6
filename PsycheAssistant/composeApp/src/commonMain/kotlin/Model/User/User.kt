@@ -1,6 +1,7 @@
 package org.psyche.assistant.Model.User
 
 import kotlinx.serialization.Serializable
+import org.psyche.assistant.Model.Group.Group
 
 @Serializable
 data class User (
@@ -8,4 +9,5 @@ data class User (
     val email: String,
     val password: String,
     val energyExpenditure: Int,
+    val group: Group? = null,
 )

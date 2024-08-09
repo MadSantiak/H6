@@ -19,7 +19,6 @@ class UserController {
         val response: HttpResponse = client.get(url) {
             header(HttpHeaders.Authorization, "Bearer $authToken")
         }
-
         return when (response.status) {
             HttpStatusCode.OK -> {
                 // Parse response body to User object

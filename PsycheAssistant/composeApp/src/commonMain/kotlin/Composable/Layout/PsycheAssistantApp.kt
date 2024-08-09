@@ -43,6 +43,8 @@ fun PsycheAssistantApp() {
                 val userDetails = UserController().getUserDetails(token)
                 userState.value = userDetails
             } catch (e: Exception) {
+
+
                 // handle error.. mkay?
             }
         }

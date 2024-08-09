@@ -2,11 +2,17 @@
 - - - 
 
 > ### Author: Mads Søndergaard
-> ### Current version: 0.0.1
+> ### Current version: 0.0.2
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.0.2:
+> General
+> - Added foundation for Group model (Entity, Repository, Controller)
+> - Various minor tweaks.
+ 
+
 ### 0.0.1:
 > General
 > - Initial commit

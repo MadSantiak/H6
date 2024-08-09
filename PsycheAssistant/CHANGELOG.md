@@ -2,11 +2,19 @@
 - - -
 
 > ### Author: Mads Søndergaard 
-> ### Current version: 0.1.0
+> ### Current version: 0.1.1
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.1.1:
+> General
+> - Migrated to IntelliJ 2024.2 in order to fix issue with debugging suspend functions
+>   - This, however, has casued a minor annoynce with physical device screen mirroring not functioning. 
+>     - [X] Reported to JetBrains.
+> - Added base model description for Group entity.
+> - Moved User settings to Settings page.
+
 ### 0.1.0:
 > General
 > - Begun development of user integration, using external database (Spring Boot/H2) for general data storage
