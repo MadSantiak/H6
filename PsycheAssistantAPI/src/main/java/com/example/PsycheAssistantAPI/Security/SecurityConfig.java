@@ -27,8 +27,11 @@ public class SecurityConfig {
                         authorizeRequests
                                 //.requestMatchers("/api/auth/**").permitAll()  // Allow access to auth endpoints
                                 .requestMatchers("/**").permitAll()  // Allow access to ALL endpoints (for development)
+                                .requestMatchers("/console/h2").permitAll()
                                 .anyRequest().authenticated()  // Require authentication for all other requests
                 )
+                .headers(headers -> headers
+                        .frameOptions().sameOrigin())
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);  // Add JWT filter
 
         return http.build();

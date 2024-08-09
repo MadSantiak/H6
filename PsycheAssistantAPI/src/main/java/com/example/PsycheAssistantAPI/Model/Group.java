@@ -4,24 +4,19 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.Nullable;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "groups")
+public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String email;
-    private String password;
-    private int energyExpenditure = 0;
 
-    @ManyToOne
-    @JoinColumn(name = "group_id")
-    private Group group;
-
-
+    @OneToMany(mappedBy = "group")
+    private List<User> users;
 }

@@ -1,6 +1,7 @@
 package org.psyche.assistant.Controller
 
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -12,6 +13,22 @@ import org.psyche.assistant.Storage.AuthStorage
 class UserController {
 
     private val client = ServiceBuilder.client
+
+    suspend fun getUserDetails(authToken: String): User? {
+        val url = ServiceBuilder.url("api/users/me")
+        val response: HttpResponse = client.get(url) {
+            header(HttpHeaders.Authorization, "Bearer $authToken")
+        }
+
+        return when (response.status) {
+            HttpStatusCode.OK -> {
+                // Parse response body to User object
+                val responseBody = response.bodyAsText()
+                Json.decodeFromString<User>(responseBody)
+            }
+            else -> null
+        }
+    }
 
     suspend fun registerUser(email: String, password: String): String {
         val url = ServiceBuilder.url("api/users/register")
@@ -39,4 +56,10 @@ class UserController {
             throw Exception("Failed to login user: ${response.status}")
         }
     }
+
+    fun logoutUser() {
+        AuthStorage.removeAuthToken()
+    }
+
+
 }
