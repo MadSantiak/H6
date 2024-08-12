@@ -1,8 +1,6 @@
-package org.psyche.assistant.Controller
-// src/commonMain/kotlin/com/example/shared/ServiceBuilder.kt
+package org.psyche.assistant.Service
 
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.*
@@ -20,6 +18,8 @@ object ServiceBuilder {
         }
     }
 
-    // Helper method to ensure controllers can be URL agnostic.
+    /**
+     * Helper method to ensure controllers can be URL agnostic.
+     */
     fun url(path: String): String = "$BASE_URL/$path"
 }

@@ -1,7 +1,6 @@
 package com.example.PsycheAssistantAPI.Controller;
 
 import com.example.PsycheAssistantAPI.Model.User;
-import com.example.PsycheAssistantAPI.Repository.UserRepository;
 import com.example.PsycheAssistantAPI.Security.JwtUtil;
 import com.example.PsycheAssistantAPI.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,23 +13,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-    private final UserRepository userRepository;
-    private final UserService userService;
-    private final JwtUtil jwtUtil;
 
     @Autowired
-    public UserController(UserRepository userRepository, UserService userService, JwtUtil jwtUtil) {
-        this.userRepository = userRepository;
-        this.userService = userService;
-        this.jwtUtil = jwtUtil;
-    }
+    private UserService userService;
+    @Autowired
+    private JwtUtil jwtUtil;
+
 
     @GetMapping()
-    public List<User> getAllUsers() { return userRepository.findAll(); }
+    public List<User> getAllUsers() { return userService.findAll(); }
 
     @GetMapping("/{id}")
     public User read(@PathVariable int id) {
-        return userRepository.findById(id).get();
+        return userService.findById(id);
     }
 
     @PostMapping("/register")
@@ -46,9 +41,8 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<User> getCurrentUser(@RequestHeader("Authorization") String authToken) {
         try {
-            // Extract the token (Assuming Bearer Token format)
             String token = authToken.replace("Bearer ", "");
-            String email = jwtUtil.extractUsername(token);  // Extract email or ID from token
+            String email = jwtUtil.extractEmail(token);
 
             User user = userService.findByEmail(email);
 

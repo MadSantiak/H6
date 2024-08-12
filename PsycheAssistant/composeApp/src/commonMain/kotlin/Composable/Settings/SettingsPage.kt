@@ -9,8 +9,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.psyche.assistant.Composable.LocalAuthToken
+import org.psyche.assistant.Composable.LocalGroup
 import org.psyche.assistant.Composable.LocalUser
+import org.psyche.assistant.Controller.GroupController
 import org.psyche.assistant.Controller.UserController
+import org.psyche.assistant.Model.Group.Group
 import org.psyche.assistant.Model.SurveyRepository
 import org.psyche.assistant.Storage.AuthStorage
 
@@ -22,14 +25,17 @@ fun SettingsPage()
 {
     val coroutineScope = rememberCoroutineScope()
     val userController = UserController()
+    val groupController = GroupController()
 
     var authToken = LocalAuthToken.current
     var user = LocalUser.current
+    var group = LocalGroup.current
+    // var group = user.value?.group?.let { groupController.getGroupDetails(it) }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
-
+    //var group by remember { mutableStateOf<Group?>(null)}
 
 
     Column(
@@ -44,6 +50,12 @@ fun SettingsPage()
             color = Color.Gray,
             modifier = Modifier.padding(16.dp)
         )
+        Text(
+            text = "Group: ${group.value?.code ?: "No Group"}",
+            style = MaterialTheme.typography.h6,
+            color = Color.Gray,
+            modifier = Modifier.padding(16.dp)
+        )
         if (authToken.value != null) {
 
             Text(
@@ -53,11 +65,21 @@ fun SettingsPage()
                 modifier = Modifier.padding(16.dp)
             )
             Button(onClick = {
+                coroutineScope.launch {
+                    val groupDetails = groupController.createGroup(authToken.value!!)
+                    group.value = groupDetails
+                }
+            }) {
+                Text(text = "Create Group")
+            }
+            Button(onClick = {
                 isLoading = true
                 coroutineScope.launch {
                     try {
-                        userController.logoutUser()
+                        userController.signOutUser()
                         authToken.value = null
+                        user.value = null
+                        group.value = null
                     } catch (e: Exception) {
                         errorMessage = e.message ?: "Unknown error"
                     } finally {
@@ -95,8 +117,8 @@ fun SettingsPage()
                 isLoading = true
                 coroutineScope.launch {
                     try {
-                        userController.registerUser(email, password)
-                        authToken.value = userController.loginUser(email, password)
+                        userController.registerNewUser(email, password)
+                        authToken.value = userController.authenticateUser(email, password)
                     } catch (e: Exception) {
                         errorMessage = e.message ?: "Unknown error"
                     } finally {

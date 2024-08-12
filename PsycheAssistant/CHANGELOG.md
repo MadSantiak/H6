@@ -2,11 +2,24 @@
 - - -
 
 > ### Author: Mads Søndergaard 
-> ### Current version: 0.1.1
+> ### Current version: 0.1.2
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.1.2:
+> General
+> - Refactoring Controller/Repository structure so delegation is now:
+>   - Controller: Used to control the action between the user and app
+>   - Service: Used by the controller to communicate between the app and server
+>   - Repository: Used to act as a contract for what functions are available to the Service.
+> - Reconfigured model so front-end now deals with ID-based relations. For the sake of ease of use, backend still operates with object based relations.
+> - General refactoring and implementation of code to assist in ongoing debugging and testing.
+> - Added additional common-screens to help indicate use flow and state (loading screen, error screen)
+
+> Android
+> - Configured logo for the app. 
+
 ### 0.1.1:
 > General
 > - Migrated to IntelliJ 2024.2 in order to fix issue with debugging suspend functions
@@ -25,7 +38,7 @@
 
 ### 0.0.5:
 > General
-> - Finetuned results page for better clarity in terms of result and user understanding.
+> - Fine tuned results page for better clarity in terms of result and user understanding.
 > - Begun reconfiguring architecture for better clarity, as well as added code documentation
 
 ### 0.0.4:

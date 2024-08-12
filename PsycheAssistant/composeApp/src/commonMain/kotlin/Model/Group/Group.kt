@@ -1,10 +1,14 @@
 package org.psyche.assistant.Model.Group
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.psyche.assistant.Model.User.User
 
 @Serializable
 data class Group (
     val id: Int,
-    val users: List<User>
+
+    // Clarify field name since back-end operates with objects, and front-end with IDs
+    @SerialName("users")
+    val userIds: List<Int>,
+    val code: String,
 )

@@ -8,16 +8,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import io.ktor.client.*
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.psyche.assistant.Composable.LocalAuthToken
-import org.psyche.assistant.Controller.ServiceBuilder
-import org.psyche.assistant.Controller.UserController
-import org.psyche.assistant.Helper.CustomTheme
+import org.psyche.assistant.Composable.LocalGroup
+import org.psyche.assistant.Composable.LocalUser
 import org.psyche.assistant.Model.SurveyRepository
-import org.psyche.assistant.Model.User.User
-import org.psyche.assistant.Storage.AuthStorage
 import psycheassistant.composeapp.generated.resources.Res
 import psycheassistant.composeapp.generated.resources.title
 
@@ -32,6 +27,8 @@ fun MainPage() {
     val db = SurveyRepository()
     var surveys by remember { mutableStateOf(db.selectAllSurveys()) }
     val authToken = LocalAuthToken.current
+    val group = LocalGroup.current
+    val user = LocalUser.current
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -40,6 +37,18 @@ fun MainPage() {
     ) {
         Text(
             text = "Auth Token: ${authToken.value ?: "No Token"}",
+            style = MaterialTheme.typography.h6,
+            color = Color.Gray,
+            modifier = Modifier.padding(16.dp)
+        )
+        Text(
+            text = "Group: ${group.value?.code ?: "No Group"}",
+            style = MaterialTheme.typography.h6,
+            color = Color.Gray,
+            modifier = Modifier.padding(16.dp)
+        )
+        Text(
+            text = "Logged in as ${user.value?.email}",
             style = MaterialTheme.typography.h6,
             color = Color.Gray,
             modifier = Modifier.padding(16.dp)

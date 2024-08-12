@@ -25,7 +25,7 @@ public class JwtUtil {
         }
     }
 
-    public String extractUsername(String token) {
+    public String extractEmail(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
@@ -33,8 +33,8 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    public boolean validateToken(String token, String username) {
-        String extractedUsername = extractUsername(token);
-        return (extractedUsername.equals(username));
+    public boolean validateToken(String token, String email) {
+        String extractedEmail = extractEmail(token);
+        return (extractedEmail.equals(email));
     }
 }

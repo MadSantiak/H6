@@ -2,11 +2,16 @@
 - - - 
 
 > ### Author: Mads Søndergaard
-> ### Current version: 0.0.2
+> ### Current version: 0.0.3
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.0.3:
+> General
+> - Worked on aligning de/serialization between backend and frontend in a way that makes technical sense.
+> - Refactored code to be in line with this approach; backend uses full-model relations, while frontend uses ID-relations.
+
 ### 0.0.2:
 > General
 > - Added foundation for Group model (Entity, Repository, Controller)

@@ -1,6 +1,5 @@
 package org.psyche.assistant.Composable.Layout
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -10,17 +9,20 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.stringResource
+import org.psyche.assistant.Composable.Common.ErrorScreen
+import org.psyche.assistant.Composable.Common.LoadingScreen
 import org.psyche.assistant.Composable.LocalAuthToken
+import org.psyche.assistant.Composable.LocalGroup
 import org.psyche.assistant.Composable.LocalUser
 import org.psyche.assistant.Composable.Main.MainPage
 import org.psyche.assistant.Composable.Settings.SettingsPage
 import org.psyche.assistant.Composable.Survey.SurveyPage
+import org.psyche.assistant.Controller.GroupController
 import org.psyche.assistant.Controller.UserController
 import org.psyche.assistant.Helper.CustomTheme
-import org.psyche.assistant.Helper.GlobalLocaleState
+import org.psyche.assistant.Model.Group.Group
 import org.psyche.assistant.Model.User.User
 import org.psyche.assistant.Storage.AuthStorage
 import psycheassistant.composeapp.generated.resources.Res
@@ -36,36 +38,49 @@ fun PsycheAssistantApp() {
     var currentScreen by remember { mutableStateOf("main") }
     var authToken = remember { mutableStateOf(AuthStorage.getAuthToken()) }
     val userState = remember { mutableStateOf<User?>(null) }
+    val groupState = remember { mutableStateOf<Group?>(null)}
+
+    var isLoading by remember { mutableStateOf(true)}
+    var isError by remember { mutableStateOf(false)}
+    var errorMessage by remember { mutableStateOf("")}
 
     LaunchedEffect(authToken.value) {
-        authToken.value?.let { token ->
+        if (authToken.value != null) {
             try {
-                val userDetails = UserController().getUserDetails(token)
+                val token = authToken.value!!
+                val userDetails = UserController().getUserProfile(token)
                 userState.value = userDetails
+                val groupDetails = userDetails?.groupId?.let { GroupController().getGroupDetails(it) }
+                groupState.value = groupDetails
+                isLoading = false
             } catch (e: Exception) {
-
-
-                // handle error.. mkay?
+                isLoading = false
+                isError = true
+                errorMessage = e.message.toString();
             }
+        } else {
+            isLoading = false
         }
     }
+
     MaterialTheme(
         /**
          * Wrap the entire contents in the custom color theme.
          */
         colors = CustomTheme.psycheColors()
     ) {
-        // Get the GlobalState value and pass it along to the compositions.
+        // Get the GlobalState value and pass it along to the compositions, allowing for updating the value across screens.
         CompositionLocalProvider(
             LocalAuthToken provides authToken,
-            LocalUser provides userState
+            LocalUser provides userState,
+            LocalGroup provides groupState
         ) {
             Scaffold(
                 /**
                  * Add a top bar for navigation, passing new values to "currentScreen" when selected, controlling the inner contents.
                  */
                 topBar = {
-                    TopAppBar{
+                    TopAppBar {
                         BottomNavigationItem(
                             icon = { Icon(Icons.Default.Home, contentDescription = null) },
                             label = { Text(stringResource(Res.string.home)) },
@@ -91,22 +106,29 @@ fun PsycheAssistantApp() {
                  * Add content, changing depending on the currentScreen value.
                  */
                 content = { innerPadding ->
-                    Column(
-                        modifier = Modifier
-                            .padding(innerPadding)
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                    ) {
-                        when (currentScreen) {
-                           "main" -> MainPage()
-                           "survey" -> SurveyPage(onBack = { currentScreen = "main" })
-                           "settings" -> SettingsPage()
+                    if (isLoading) {
+                        LoadingScreen()
+                    } else if (isError) {
+                        ErrorScreen(message = errorMessage)
+                    } else {
+                        Column(
+                            modifier = Modifier
+                                .padding(innerPadding)
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            when (currentScreen) {
+                                "main" -> MainPage()
+                                "survey" -> SurveyPage(onBack = { currentScreen = "main" })
+                                "settings" -> SettingsPage()
+                            }
                         }
                     }
                 }
             )
         }
     }
+
 }
 
 
