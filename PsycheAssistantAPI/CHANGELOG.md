@@ -2,11 +2,17 @@
 - - - 
 
 > ### Author: Mads Søndergaard
-> ### Current version: 0.0.3
+> ### Current version: 0.0.4
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.0.4:
+> General
+> - Polished user manipulation of group content
+> - Added helper method for authentication
+> - Various smaller adjustments to logic as needed.
+
 ### 0.0.3:
 > General
 > - Worked on aligning de/serialization between backend and frontend in a way that makes technical sense.

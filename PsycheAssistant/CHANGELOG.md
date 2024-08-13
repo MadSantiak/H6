@@ -2,11 +2,21 @@
 - - -
 
 > ### Author: Mads Søndergaard 
-> ### Current version: 0.1.2
+> ### Current version: 0.1.3
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.1.3:
+> General
+> - Further polish to UI/UX
+> - Implemented logic for group owner management of users (remove user)
+> - Implemented logic for joining groups
+> - Consolidated Group and User setting pages to a single Account settings page.
+> - Moved hard-coded string values to resources.
+> - Made various adjustments to layout
+> - Added error handling on app start-up, in case server is unavailable. Still allowing the user to take surveys if that is the case.
+
 ### 0.1.2:
 > General
 > - Refactoring Controller/Repository structure so delegation is now:
@@ -23,7 +33,7 @@
 ### 0.1.1:
 > General
 > - Migrated to IntelliJ 2024.2 in order to fix issue with debugging suspend functions
->   - This, however, has casued a minor annoynce with physical device screen mirroring not functioning. 
+>   - This, however, has caused a minor annoyance with physical device screen mirroring not functioning. 
 >     - [X] Reported to JetBrains.
 > - Added base model description for Group entity.
 > - Moved User settings to Settings page.

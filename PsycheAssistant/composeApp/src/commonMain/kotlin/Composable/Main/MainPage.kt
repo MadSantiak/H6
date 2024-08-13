@@ -35,24 +35,6 @@ fun MainPage() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = "Auth Token: ${authToken.value ?: "No Token"}",
-            style = MaterialTheme.typography.h6,
-            color = Color.Gray,
-            modifier = Modifier.padding(16.dp)
-        )
-        Text(
-            text = "Group: ${group.value?.code ?: "No Group"}",
-            style = MaterialTheme.typography.h6,
-            color = Color.Gray,
-            modifier = Modifier.padding(16.dp)
-        )
-        Text(
-            text = "Logged in as ${user.value?.email}",
-            style = MaterialTheme.typography.h6,
-            color = Color.Gray,
-            modifier = Modifier.padding(16.dp)
-        )
         Column(
             modifier = Modifier
                 .fillMaxSize()

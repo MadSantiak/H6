@@ -15,5 +15,12 @@ class GroupController {
         return groupService.createGroup(authToken)
     }
 
-    suspend fun joinGroup() {}
+    suspend fun joinGroup(authToken: String, code: String): Group? {
+        return groupService.joinGroup(authToken, code)
+    }
+
+    suspend fun kickMember(authToken: String, groupId: Int, userId: Int): Group? {
+        return groupService.removeUserFromGroup(authToken, groupId, userId)
+    }
+
 }

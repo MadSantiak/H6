@@ -21,4 +21,8 @@ class UserController {
     suspend fun signOutUser() {
         userService.logoutUser()
     }
+
+    suspend fun getUserById(id: Int): User? {
+        return userService.getUserById(id)
+    }
 }

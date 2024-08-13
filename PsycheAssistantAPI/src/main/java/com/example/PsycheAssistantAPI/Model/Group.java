@@ -31,7 +31,13 @@ public class Group {
     @JsonIdentityReference(alwaysAsId = true)
     private List<User> users = new ArrayList<>();
 
+    @OneToOne
+    @JsonIdentityReference(alwaysAsId = true)
+    private User owner;
+
     private String code;
+
+
 
     public void addUser(User user) {
         users.add(user);

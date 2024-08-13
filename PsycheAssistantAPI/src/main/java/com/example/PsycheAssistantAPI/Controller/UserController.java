@@ -33,8 +33,8 @@ public class UserController {
         try {
             userService.registerUser(email, password);
             return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error registering user");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
