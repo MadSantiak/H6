@@ -36,12 +36,8 @@ public class GroupService {
         group.addUser(creator);
         group.setOwner(creator);
 
-        Group newGroup = groupRepository.save(group);
 
-        creator.setGroup(newGroup);
-        userRepository.save(creator);
-
-        return newGroup;
+        return groupRepository.save(group);
     }
 
     public Group joinGroup(String code, User user) {
@@ -56,7 +52,6 @@ public class GroupService {
 
         group.addUser(user);
         groupRepository.save(group);
-        userRepository.save(user);
 
         return group;
     }
@@ -69,7 +64,6 @@ public class GroupService {
             throw new RuntimeException("User is not a member of the group");
         }
         group.removeUser(user);
-        userRepository.save(user);
         groupRepository.save(group);
 
         return group;

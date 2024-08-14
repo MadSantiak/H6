@@ -24,7 +24,6 @@ import psycheassistant.composeapp.generated.resources.*
 @Composable
 fun AccountManagementPage() {
     val authToken = LocalAuthToken.current
-    val user = LocalUser.current
 
     Column(
         modifier = Modifier

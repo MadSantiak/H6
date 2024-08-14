@@ -2,11 +2,17 @@
 - - - 
 
 > ### Author: Mads Søndergaard
-> ### Current version: 0.0.4
+> ### Current version: 0.0.5
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.0.5:
+> General
+> - Fine-tuned certain use cases such as removal of users
+> - Patched logical hole which caused recursion when fetching users/groups
+> - Implemented more logic related to Activities.
+ 
 ### 0.0.4:
 > General
 > - Polished user manipulation of group content

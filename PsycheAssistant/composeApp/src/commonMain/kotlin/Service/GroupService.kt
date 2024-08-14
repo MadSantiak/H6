@@ -36,6 +36,7 @@ class GroupService : GroupRepository {
             setBody(Json.encodeToString(mapOf("code" to code)))
         }
         return when (response.status) {
+
             HttpStatusCode.OK -> {
                 val responseBody = response.bodyAsText()
                 Json.decodeFromString<Group>(responseBody)
