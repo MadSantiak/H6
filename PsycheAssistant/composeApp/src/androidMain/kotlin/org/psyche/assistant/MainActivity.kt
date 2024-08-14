@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.tencent.mmkv.MMKV
 import org.psyche.assistant.Composable.Layout.PsycheAssistantApp
 
 import org.psyche.assistant.Model.SurveyRepository
@@ -16,7 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         appContext = applicationContext
-
+        MMKV.initialize(this)
 
         setContent {
             PsycheAssistantApp()

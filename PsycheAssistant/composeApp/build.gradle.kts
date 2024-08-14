@@ -8,8 +8,9 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.sqlDelight)
-    kotlin("plugin.serialization")
 
+    // New:
+    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -47,13 +48,6 @@ kotlin {
     }
 
     sourceSets {
-
-        androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.sqldelight.android)
-
-        }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -64,11 +58,22 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
             implementation(libs.sqldelight.coroutines)
-
+            implementation("io.ktor:ktor-client-core:2.3.3")
+            implementation("io.ktor:ktor-client-content-negotiation:2.3.3")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.3")
+            implementation("io.ktor:ktor-client-cio:2.3.3")
+            implementation("com.tencent:mmkv:1.2.10")
         }
+        androidMain.dependencies {
+            implementation(compose.preview)
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.sqldelight.android)
+        }
+
 
         iosMain.dependencies {
             implementation(libs.sqldelight.native)
+
         }
 
     }

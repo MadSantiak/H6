@@ -1,7 +1,7 @@
 <resources>
     <string name="title">Psyk Assistent</string>
     <string name="home">Hjem</string>
-    <string name="survey">Spørgeskema</string>
+    <string name="survey">Undersøgelser</string>
     <string name="question_of_template">Spørgsmål %1$d af %2$d</string>
     <string name="not_at_all">Slet ikke</string>
     <string name="very_much">I høj grad</string>
@@ -35,4 +35,34 @@
     <string name="date">Dato</string>
     <string name="score">Score</string>
     <string name="delete">Slet</string>
+    <string name="no_connection">Fejl: Kunne ikke forbinde til server</string>
+
+    <!-- Settings -->
+    <string name="settings">Indstillinger</string>
+    <string name="auth_token">Auth Token: %1$s</string>
+    <string name="no_token">Ingen Token</string>
+    <string name="group">Gruppe: %1$s</string>
+    <string name="no_group">Ingen gruppe</string>
+    <string name="logged_in_as">Logget ind som %1$s</string>
+    <string name="email">Email</string>
+    <string name="password">Kodeord</string>
+    <string name="unknown_error">Ukendt fejl</string>
+    <string name="user_management">Brugerhåndtering</string>
+    <string name="group_management">Gruppehåndtering</string>
+    <string name="sign_in_for_group">Log ind for at oprette eller deltage i en gruppe</string>
+    <string name="failed_to_kick_member">Kunne ikke fjerne medlem</string>
+    <string name="create_group">Opret gruppe</string>
+    <string name="join_group">Deltag i gruppe</string>
+    <string name="group_code">Gruppe kode</string>
+    <string name="no_code_or_auth">Gruppe koden må ikke være tom, eller du er ikke logget ind</string>
+    <string name="no_members">Der blev ikke fundet nogen medlemmer..</string>
+    <string name="no_email_or_pass">Email og kodeord må ikke være tomme</string>
+    <string name="login">Log ind</string>
+    <string name="register">Registrer</string>
+    <string name="logout">Log ud</string>
+    <string name="member_label">Medlem: %1$s</string>
+    <string name="energy_expenditure_label">Energiforbrug: %1$d</string>
+
+    <!-- Activities -->
+    <string name="activities">Aktiviteter</string>
 </resources>

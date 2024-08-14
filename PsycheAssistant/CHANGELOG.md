@@ -2,14 +2,53 @@
 - - -
 
 > ### Author: Mads Søndergaard 
-> ### Current version: 0.0.5
+> ### Current version: 0.1.3
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.1.3:
+> General
+> - Further polish to UI/UX
+> - Implemented logic for group owner management of users (remove user)
+> - Implemented logic for joining groups
+> - Consolidated Group and User setting pages to a single Account settings page.
+> - Moved hard-coded string values to resources.
+> - Made various adjustments to layout
+> - Added error handling on app start-up, in case server is unavailable. Still allowing the user to take surveys if that is the case.
+
+### 0.1.2:
+> General
+> - Refactoring Controller/Repository structure so delegation is now:
+>   - Controller: Used to control the action between the user and app
+>   - Service: Used by the controller to communicate between the app and server
+>   - Repository: Used to act as a contract for what functions are available to the Service.
+> - Reconfigured model so front-end now deals with ID-based relations. For the sake of ease of use, backend still operates with object based relations.
+> - General refactoring and implementation of code to assist in ongoing debugging and testing.
+> - Added additional common-screens to help indicate use flow and state (loading screen, error screen)
+
+> Android
+> - Configured logo for the app. 
+
+### 0.1.1:
+> General
+> - Migrated to IntelliJ 2024.2 in order to fix issue with debugging suspend functions
+>   - This, however, has caused a minor annoyance with physical device screen mirroring not functioning. 
+>     - [X] Reported to JetBrains.
+> - Added base model description for Group entity.
+> - Moved User settings to Settings page.
+
+### 0.1.0:
+> General
+> - Begun development of user integration, using external database (Spring Boot/H2) for general data storage
+> - Minor refactoring, but primarily avoiding legacy proof-of-concept code for the time being.
+
+> Android
+> - Begun development of security integration, using MMKV for Android specific secure storage.
+
 ### 0.0.5:
 > General
-> - Finetuned results page for better clarity in terms of result and user understanding.
+> - Fine tuned results page for better clarity in terms of result and user understanding.
 > - Begun reconfiguring architecture for better clarity, as well as added code documentation
 
 ### 0.0.4:

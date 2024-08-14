@@ -2,117 +2,176 @@ package org.psyche.assistant.Composable.Layout
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.twotone.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.resources.painterResource
+
 import org.jetbrains.compose.resources.stringResource
+import org.psyche.assistant.Composable.Common.ErrorScreen
+import org.psyche.assistant.Composable.Common.LoadingScreen
+import org.psyche.assistant.Composable.LocalAuthToken
+import org.psyche.assistant.Composable.LocalGroup
+import org.psyche.assistant.Composable.LocalUser
 import org.psyche.assistant.Composable.Main.MainPage
+import org.psyche.assistant.Composable.Settings.AccountManagementPage
 import org.psyche.assistant.Composable.Survey.SurveyPage
+import org.psyche.assistant.Controller.GroupController
+import org.psyche.assistant.Controller.UserController
 import org.psyche.assistant.Helper.CustomTheme
-import org.psyche.assistant.Helper.GlobalLocaleState
+import org.psyche.assistant.Model.Group.Group
+import org.psyche.assistant.Model.User.User
+import org.psyche.assistant.Storage.AuthStorage
 import psycheassistant.composeapp.generated.resources.Res
 import psycheassistant.composeapp.generated.resources.*
 
-
-/**
- * Composable that controls the screen, adding a nav-bar at the top and a switch mechanism for navigating between them.
- * I.e. when one item is clicked, the "currentScreen" variable changes, and the appropriate Composable is called.
- */
 @Composable
 fun PsycheAssistantApp() {
     var currentScreen by remember { mutableStateOf("main") }
-    var expanded by remember { mutableStateOf(false) }
+    var authToken = remember { mutableStateOf(AuthStorage.getAuthToken()) }
+    val userState = remember { mutableStateOf<User?>(null) }
+    val groupState = remember { mutableStateOf<Group?>(null) }
 
-    val english = stringResource(Res.string.english)
-    val danish = stringResource(Res.string.danish)
+    var isLoading by remember { mutableStateOf(true) }
+    var isError by remember { mutableStateOf(false) }
+    var displayError by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+
+    LaunchedEffect(authToken.value) {
+        if (authToken.value != null) {
+            try {
+                val token = authToken.value!!
+                val userDetails = UserController().getUserProfile(token)
+                userState.value = userDetails
+                val groupDetails = userDetails?.groupId?.let { GroupController().getGroupDetails(it) }
+                groupState.value = groupDetails
+                isLoading = false
+            } catch (e: Exception) {
+                isLoading = false
+                isError = true
+                displayError = true
+                errorMessage = e.message.toString()
+            }
+        } else {
+            isLoading = false
+        }
+    }
+
     MaterialTheme(
-        /**
-         * Wrap the entire contents in the custom color theme.
-         */
         colors = CustomTheme.psycheColors()
     ) {
-        Scaffold(
-            /**
-             * Add a top bar for navigation, passing new values to "currentScreen" when selected, controlling the inner contents.
-             */
-            topBar = {
-                TopAppBar{
-                    BottomNavigationItem(
-                        icon = { Icon(Icons.Default.Home, contentDescription = null) },
-                        label = { Text(stringResource(Res.string.home)) },
-                        selected = currentScreen == "main",
-                        onClick = { currentScreen = "main" }
-                    )
-                    BottomNavigationItem(
-                        icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = null) },
-                        label = { Text(stringResource(Res.string.survey)) },
-                        selected = currentScreen == "survey",
-                        onClick = { currentScreen = "survey" }
-                    )
-                }
-            },
-            /**
-             * Add a bottom bar which allows for selecting question-language (doesn't affect UI broadly speaking,
-             * this is reserved for later development as it would have to be platform specific)
-             */
-            bottomBar = {
-                BottomAppBar(
-                    backgroundColor = MaterialTheme.colors.primary
-                ) {
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(stringResource(Res.string.language))
-                            Box {
+        CompositionLocalProvider(
+            LocalAuthToken provides authToken,
+            LocalUser provides userState,
+            LocalGroup provides groupState
+        ) {
+            Scaffold(
+                topBar = {
+                    Box(
+                        modifier = Modifier
+                            .clickable { currentScreen = "main" } // Make the entire TopAppBar clickable
+                            .fillMaxWidth()
+                    ) {
+                        TopAppBar(
+                            title = {
                                 Text(
-                                    text = if (GlobalLocaleState.locale == "en") english else danish,
-                                    modifier = Modifier.clickable { expanded = true }
+                                    text = stringResource(Res.string.home),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
                                 )
-                                DropdownMenu(
-                                    expanded = expanded,
-                                    onDismissRequest = { expanded = false }
-                                ) {
-                                    DropdownMenuItem(onClick = {
-                                        GlobalLocaleState.locale = "en"
-                                        expanded = false
-                                    }) {
-                                        Text(english)
-                                    }
-                                    DropdownMenuItem(onClick = {
-                                        GlobalLocaleState.locale = "da"
-                                        expanded = false
-                                    }) {
-                                        Text(danish)
-                                    }
-                                }
+                            },
+                            navigationIcon = {
+                                val icon: Painter = painterResource(Res.drawable.psyche_assistant_icon)
+                                Icon(
+                                    painter = icon,
+                                    contentDescription = stringResource(Res.string.home),
+                                    tint = Color.Unspecified
+                                )
+                            },
+                        )
+                    }
+                },
+                bottomBar = {
+                    BottomNavigation {
+                        BottomNavigationItem(
+                            icon = { Icon(Icons.Filled.List, contentDescription = null) },
+                            label = { Text(stringResource(Res.string.survey), style = TextStyle(fontSize = 11.sp), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                            selected = currentScreen == "survey",
+                            onClick = { currentScreen = "survey" }
+                        )
+                        if (!isError) {
+                            BottomNavigationItem(
+                                icon = { Icon(Icons.TwoTone.CheckCircle, contentDescription = null) },
+                                label = {
+                                    Text(
+                                        stringResource(Res.string.activities),
+                                        style = TextStyle(fontSize = 11.sp),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                },
+                                selected = currentScreen == "activities",
+                                onClick = { currentScreen = "activities" }
+                            )
+                            BottomNavigationItem(
+                                icon = { Icon(Icons.TwoTone.Settings, contentDescription = null) },
+                                label = {
+                                    Text(
+                                        stringResource(Res.string.settings),
+                                        style = TextStyle(fontSize = 11.sp),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                },
+                                selected = currentScreen == "settings",
+                                onClick = { currentScreen = "settings" }
+                            )
+                        }
+                    }
+                },
+                content = { innerPadding ->
+                    if (isLoading) {
+                        LoadingScreen()
+                    } else {
+                        Column(
+                            modifier = Modifier
+                                .padding(innerPadding)
+                                .fillMaxSize()
+                        ) {
+                            when (currentScreen) {
+                                "main" -> MainPage()
+                                "survey" -> SurveyPage(onBack = { currentScreen = "main" })
+                                "settings" -> AccountManagementPage()
                             }
                         }
                     }
                 }
-            },
-            /**
-             * Add content, changing depending on the currentScreen value.
-             */
-            content = { innerPadding ->
-                Column(
-                    modifier = Modifier
-                        .padding(innerPadding) // Apply padding to avoid overlap
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    when (currentScreen) {
-                       "main" -> MainPage()
-                       "survey" -> SurveyPage(onBack = { currentScreen = "main" })
+            )
+
+            // Error dialog
+            if (displayError) {
+                AlertDialog(
+                    onDismissRequest = { displayError = false }, // Hide the dialog when the user clicks outside
+                    title = { Text(stringResource(Res.string.no_connection)) },
+                    text = { Text(errorMessage) },
+                    confirmButton = {
+                        Button(
+                            onClick = { displayError = false } // Hide the dialog when the user clicks "OK"
+                        ) {
+                            Text("OK")
+                        }
                     }
-                }
+                )
             }
-        )
+        }
     }
 }
-
-
