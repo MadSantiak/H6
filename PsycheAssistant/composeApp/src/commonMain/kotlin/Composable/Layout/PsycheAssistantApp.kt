@@ -58,7 +58,6 @@ fun PsycheAssistantApp() {
             } catch (e: Exception) {
                 isLoading = false
                 isError = true
-                displayError = true
                 errorMessage = e.message.toString()
             }
         } else {
@@ -108,34 +107,34 @@ fun PsycheAssistantApp() {
                             selected = currentScreen == "survey",
                             onClick = { currentScreen = "survey" }
                         )
-                        if (!isError) {
-                            BottomNavigationItem(
-                                icon = { Icon(Icons.TwoTone.CheckCircle, contentDescription = null) },
-                                label = {
-                                    Text(
-                                        stringResource(Res.string.activities),
-                                        style = TextStyle(fontSize = 11.sp),
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                },
-                                selected = currentScreen == "activities",
-                                onClick = { currentScreen = "activities" }
-                            )
-                            BottomNavigationItem(
-                                icon = { Icon(Icons.TwoTone.Settings, contentDescription = null) },
-                                label = {
-                                    Text(
-                                        stringResource(Res.string.settings),
-                                        style = TextStyle(fontSize = 11.sp),
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
-                                },
-                                selected = currentScreen == "settings",
-                                onClick = { currentScreen = "settings" }
-                            )
-                        }
+
+                        BottomNavigationItem(
+                            icon = { Icon(Icons.TwoTone.CheckCircle, contentDescription = null) },
+                            label = {
+                                Text(
+                                    stringResource(Res.string.activities),
+                                    style = TextStyle(fontSize = 11.sp),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            },
+                            selected = currentScreen == "activities",
+                            onClick = { currentScreen = "activities" }
+                        )
+                        BottomNavigationItem(
+                            icon = { Icon(Icons.TwoTone.Settings, contentDescription = null) },
+                            label = {
+                                Text(
+                                    stringResource(Res.string.settings),
+                                    style = TextStyle(fontSize = 11.sp),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            },
+                            selected = currentScreen == "settings",
+                            onClick = { currentScreen = "settings" }
+                        )
+
                     }
                 },
                 content = { innerPadding ->
@@ -158,14 +157,14 @@ fun PsycheAssistantApp() {
             )
 
             // Error dialog
-            if (displayError) {
+            if (isError) {
                 AlertDialog(
-                    onDismissRequest = { displayError = false }, // Hide the dialog when the user clicks outside
+                    onDismissRequest = { isError = false }, // Hide the dialog when the user clicks outside
                     title = { Text(stringResource(Res.string.no_connection)) },
                     text = { Text(errorMessage) },
                     confirmButton = {
                         Button(
-                            onClick = { displayError = false } // Hide the dialog when the user clicks "OK"
+                            onClick = { isError = false } // Hide the dialog when the user clicks "OK"
                         ) {
                             Text("OK")
                         }

@@ -10,6 +10,9 @@ data class Group (
     // Clarify field name since back-end operates with objects, and front-end with IDs
     @SerialName("users")
     val userIds: List<Int>,
+    @SerialName("activities")
+    val activityIds: List<Int>,
+
     @SerialName("owner")
     val ownerId: Int?,
 

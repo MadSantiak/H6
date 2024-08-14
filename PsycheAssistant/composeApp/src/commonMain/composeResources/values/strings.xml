@@ -51,6 +51,7 @@
     <string name="group_management">Group Management</string>
     <string name="sign_in_for_group">Sign in to create or join a group</string>
     <string name="failed_to_kick_member">Failed to kick member</string>
+    <string name="kick_member">Kick member</string>
     <string name="create_group">Create group</string>
     <string name="join_group">Join group</string>
     <string name="group_code">Group code</string>
@@ -60,8 +61,12 @@
     <string name="login">Log in</string>
     <string name="register">Register</string>
     <string name="logout">Log out</string>
+    <string name="member">Member:</string>
     <string name="member_label">Member: %1$s</string>
+    <string name="members_amount">Member amount: %1$s</string>
+    <string name="energy_expenditure">Energy Expenditure</string>
     <string name="energy_expenditure_label">Energy Expenditure: %1$d</string>
+    <string name="you">You</string>
 
     <!-- Activities -->
     <string name="activities">Activities</string>

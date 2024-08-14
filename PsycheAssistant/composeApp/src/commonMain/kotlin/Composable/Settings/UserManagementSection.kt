@@ -40,6 +40,7 @@ fun UserManagementPage() {
         .padding(8.dp)
     ) {
         if (authToken.value != null) {
+            //Text(authToken.value.toString())
             Text(
                 text = stringResource(Res.string.logged_in_as, user.value?.email ?: ""),
                 style = MaterialTheme.typography.h6)

@@ -51,6 +51,7 @@
     <string name="group_management">Gruppehåndtering</string>
     <string name="sign_in_for_group">Log ind for at oprette eller deltage i en gruppe</string>
     <string name="failed_to_kick_member">Kunne ikke fjerne medlem</string>
+    <string name="kick_member">Fjern medlem</string>
     <string name="create_group">Opret gruppe</string>
     <string name="join_group">Deltag i gruppe</string>
     <string name="group_code">Gruppe kode</string>
@@ -60,8 +61,12 @@
     <string name="login">Log ind</string>
     <string name="register">Registrer</string>
     <string name="logout">Log ud</string>
+    <string name="member">Medlem</string>
     <string name="member_label">Medlem: %1$s</string>
+    <string name="members_amount">Antal medlemmer: %1$s</string>
+    <string name="energy_expenditure">Energiforbrug</string>
     <string name="energy_expenditure_label">Energiforbrug: %1$d</string>
+    <string name="you">Dig</string>
 
     <!-- Activities -->
     <string name="activities">Aktiviteter</string>

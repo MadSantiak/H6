@@ -2,11 +2,18 @@
 - - -
 
 > ### Author: Mads Søndergaard 
-> ### Current version: 0.1.3
+> ### Current version: 0.1.4
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.1.4:
+> General
+> - Tested various use cases for logical holes, patched in both front- and back-end.
+> - Refactored views so file structure is more readable and easier to maintain/edit
+> - Improved clarity on UI/UX in terms of user overview for groups, navigation, and the like.
+> - Further implemented Activity model and relation to other models (User/Group)
+
 ### 0.1.3:
 > General
 > - Further polish to UI/UX
