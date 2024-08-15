@@ -7,7 +7,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -29,16 +31,30 @@ public class Activity {
     @ManyToOne
     @JoinColumn(name = "group_id")
     @JsonIdentityReference(alwaysAsId = true)
+    @ToString.Exclude
     private Group group = null;
 
-    @OneToOne
+    @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
+    @ToString.Exclude
     private User owner;
 
     @OneToOne
     @JsonIdentityReference(alwaysAsId = true)
-    private User handler;
+    private User handledBy = null;
 
-    private LocalDateTime deadline;
-    private LocalDateTime handledOn = null;
+    private LocalDate deadline;
+    private LocalDate handledOn = null;
+    private boolean completed = false;
+
+    public Activity(User owner, String description, int energyCost, LocalDate deadline) {
+        this.owner = owner;
+        this.description = description;
+        this.energyCost = energyCost;
+        this.deadline = deadline;
+
+        if (owner.getGroup() != null) {
+            this.group = owner.getGroup();
+        }
+    }
 }

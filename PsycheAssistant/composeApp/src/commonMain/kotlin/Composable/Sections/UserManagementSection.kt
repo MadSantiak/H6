@@ -1,4 +1,4 @@
-package org.psyche.assistant.Composable.Settings
+package org.psyche.assistant.Composable.Sections
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -16,7 +16,7 @@ import psycheassistant.composeapp.generated.resources.*
 
 
 @Composable
-fun UserManagementPage() {
+fun UserManagementSection() {
     val coroutineScope = rememberCoroutineScope()
     val userController = UserController()
 

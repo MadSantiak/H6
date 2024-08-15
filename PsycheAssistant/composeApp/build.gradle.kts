@@ -63,6 +63,8 @@ kotlin {
             implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.3")
             implementation("io.ktor:ktor-client-cio:2.3.3")
             implementation("com.tencent:mmkv:1.2.10")
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+            implementation("network.chaintech:kmp-date-time-picker:1.0.3")
         }
         androidMain.dependencies {
             implementation(compose.preview)
@@ -118,5 +120,7 @@ android {
 }
 dependencies {
     implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.foundation.android)
+    implementation(libs.androidx.core.i18n)
 }
 

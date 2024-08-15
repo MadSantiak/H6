@@ -1,8 +1,7 @@
-package org.psyche.assistant.Composable.Settings
+package org.psyche.assistant.Composable.Sections
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -15,13 +14,12 @@ import org.psyche.assistant.Controller.GroupController
 import org.psyche.assistant.Composable.LocalAuthToken
 import org.psyche.assistant.Composable.LocalGroup
 import org.psyche.assistant.Composable.LocalUser
-import org.psyche.assistant.Composable.User.UserItem
 import org.psyche.assistant.Controller.UserController
 import org.psyche.assistant.Model.User.User
 import psycheassistant.composeapp.generated.resources.*
 
 @Composable
-fun GroupManagementPage() {
+fun GroupManagementSection() {
     val coroutineScope = rememberCoroutineScope()
     val groupController = GroupController()
     val userController = UserController()

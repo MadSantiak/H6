@@ -1,4 +1,4 @@
-package org.psyche.assistant.Composable.Survey
+package org.psyche.assistant.Composable.Pages
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
@@ -8,6 +8,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
+import org.psyche.assistant.Composable.Items.QuestionItem
+import org.psyche.assistant.Composable.Sections.SurveyResultSection
 import org.psyche.assistant.Helper.GlobalLocaleState
 import org.psyche.assistant.JsonLoader
 import org.psyche.assistant.Model.SurveyModel
@@ -67,7 +69,7 @@ fun SurveyPage(onBack: () -> Unit) {
                 questions.map{questionModel -> questionModel.surveyModel = surveyModel}
                 var db = SurveyRepository()
                 db.insertSurvey(surveyModel)
-                ResultView(surveyModel)
+                SurveyResultSection(surveyModel)
             }
         }
     }

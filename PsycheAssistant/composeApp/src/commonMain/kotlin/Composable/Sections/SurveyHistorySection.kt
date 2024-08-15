@@ -1,3 +1,5 @@
+package org.psyche.assistant.Composable.Sections
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +14,6 @@ import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.stringResource
 import org.psyche.assistant.Helper.DateFormatHelper
 import org.psyche.assistant.Helper.LevelColor
-import org.psyche.assistant.Model.SurveyRepository
 import org.psyche.assistant.Survey
 import psycheassistant.composeapp.generated.resources.*
 
@@ -22,7 +23,7 @@ import psycheassistant.composeapp.generated.resources.*
  * This is a limitation of the way SQL Delight auto-generates classes.
  */
 @Composable
-fun SurveyHistory(surveys: List<Survey>, onDeleteSurvey: (Long) -> Unit) {
+fun SurveyHistorySection(surveys: List<Survey>, onDeleteSurvey: (Long) -> Unit) {
     if (surveys.isEmpty()) {
         return
     }

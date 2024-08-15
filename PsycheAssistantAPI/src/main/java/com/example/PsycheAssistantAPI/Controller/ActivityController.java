@@ -13,7 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/activities")
@@ -34,11 +36,15 @@ public class ActivityController {
     public Activity read(@PathVariable int id) {
         return activityService.findById(id);
     }
+
     @PostMapping("/create")
     public ResponseEntity<Activity> createActivity(
             @RequestHeader("Authorization") String authHeader,
-            @RequestParam("groupId") int groupId,
-            @RequestParam("deadline") String deadline) {
+            @RequestBody Map<String, Object> payload) {
+
+        String deadline = (String) payload.get("deadline");
+        String description = (String) payload.get("description");
+        int energyCost = Integer.parseInt((String) payload.get("energyCost"));
 
         // Validate user authorization
         ResponseEntity<User> userResponse = authHelper.validateAndGetUser(authHeader);
@@ -50,10 +56,30 @@ public class ActivityController {
         assert user != null;
 
         try {
-            Activity newActivity = activityService.createActivity(user.getId(), groupId, deadline);
+            Activity newActivity = activityService.createActivity(user, deadline, description, energyCost);
             return new ResponseEntity<>(newActivity, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("/{id}/complete")
+    public ResponseEntity<Void> completeActivity(@PathVariable int id) {
+        boolean success = activityService.completeActivity(id);
+        return success ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<Void> deleteActivity(@PathVariable int id) {
+        boolean success = activityService.deleteActivity(id);
+        return success ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/group/{groupId}")
+    public ResponseEntity<List<Activity>> getActivitiesForGroupWithDeadline(
+            @PathVariable int groupId,
+            @RequestParam("date") String date) {
+        List<Activity> activities = activityService.getActivitiesForGroupWithDeadline(groupId, date);
+        return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 }

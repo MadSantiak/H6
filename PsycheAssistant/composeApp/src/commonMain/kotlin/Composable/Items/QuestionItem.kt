@@ -1,4 +1,4 @@
-package org.psyche.assistant.Composable.Survey
+package org.psyche.assistant.Composable.Items
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button

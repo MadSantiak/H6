@@ -1,17 +1,14 @@
-package org.psyche.assistant.Composable.Main
+package org.psyche.assistant.Composable.Pages
 
-import SurveyHistory
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
-import org.psyche.assistant.Composable.LocalAuthToken
-import org.psyche.assistant.Composable.LocalGroup
-import org.psyche.assistant.Composable.LocalUser
+import org.psyche.assistant.Composable.Sections.SurveyHistorySection
 import org.psyche.assistant.Model.SurveyRepository
 import psycheassistant.composeapp.generated.resources.Res
 import psycheassistant.composeapp.generated.resources.title
@@ -26,9 +23,6 @@ fun MainPage() {
     // Retrieve surveys from SQL Delight local storage.
     val db = SurveyRepository()
     var surveys by remember { mutableStateOf(db.selectAllSurveys()) }
-    val authToken = LocalAuthToken.current
-    val group = LocalGroup.current
-    val user = LocalUser.current
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -44,7 +38,7 @@ fun MainPage() {
         ) {
             Text(stringResource(Res.string.title), style = MaterialTheme.typography.h4)
             Spacer(modifier = Modifier.height(16.dp))
-            SurveyHistory(
+            SurveyHistorySection(
                 surveys = surveys,
                 onDeleteSurvey = { surveyId ->
                     db.deleteSurveyById(surveyId)

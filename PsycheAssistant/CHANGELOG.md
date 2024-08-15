@@ -2,11 +2,19 @@
 - - -
 
 > ### Author: Mads Søndergaard 
-> ### Current version: 0.1.4
+> ### Current version: 0.1.5
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.1.5:
+> General
+> - Fleshed out activity-based views, including dialogs for creation, precursor to list views, etc.
+> - Refactored project structure, including the structure belonging to the proof-of-concept version of the project.
+> - Corrected some of the API communication in terms of how data is processed front-end before being sent to back-end
+>   - Note the single-source-of-truth is kept in Backend, but verification is still carried out in front-end
+
+
 ### 0.1.4:
 > General
 > - Tested various use cases for logical holes, patched in both front- and back-end.

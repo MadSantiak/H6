@@ -1,37 +1,35 @@
-package org.psyche.assistant.Composable.Layout
+package org.psyche.assistant.Composable.Main
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.twotone.*
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.twotone.CheckCircle
+import androidx.compose.material.icons.twotone.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
-
 import org.jetbrains.compose.resources.stringResource
-import org.psyche.assistant.Composable.Common.ErrorScreen
 import org.psyche.assistant.Composable.Common.LoadingScreen
 import org.psyche.assistant.Composable.LocalAuthToken
 import org.psyche.assistant.Composable.LocalGroup
 import org.psyche.assistant.Composable.LocalUser
-import org.psyche.assistant.Composable.Main.MainPage
-import org.psyche.assistant.Composable.Settings.AccountManagementPage
-import org.psyche.assistant.Composable.Survey.SurveyPage
+import org.psyche.assistant.Composable.Pages.AccountManagementPage
+import org.psyche.assistant.Composable.Pages.ActivityPage
+import org.psyche.assistant.Composable.Pages.MainPage
+import org.psyche.assistant.Composable.Pages.SurveyPage
 import org.psyche.assistant.Controller.GroupController
 import org.psyche.assistant.Controller.UserController
 import org.psyche.assistant.Helper.CustomTheme
 import org.psyche.assistant.Model.Group.Group
 import org.psyche.assistant.Model.User.User
 import org.psyche.assistant.Storage.AuthStorage
-import psycheassistant.composeapp.generated.resources.Res
 import psycheassistant.composeapp.generated.resources.*
 
 @Composable
@@ -41,9 +39,9 @@ fun PsycheAssistantApp() {
     val userState = remember { mutableStateOf<User?>(null) }
     val groupState = remember { mutableStateOf<Group?>(null) }
 
+
     var isLoading by remember { mutableStateOf(true) }
     var isError by remember { mutableStateOf(false) }
-    var displayError by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
 
     LaunchedEffect(authToken.value) {
@@ -103,7 +101,14 @@ fun PsycheAssistantApp() {
                     BottomNavigation {
                         BottomNavigationItem(
                             icon = { Icon(Icons.Filled.List, contentDescription = null) },
-                            label = { Text(stringResource(Res.string.survey), style = TextStyle(fontSize = 11.sp), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                            label = {
+                                Text(
+                                    stringResource(Res.string.survey),
+                                    style = TextStyle(fontSize = 11.sp),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                            },
                             selected = currentScreen == "survey",
                             onClick = { currentScreen = "survey" }
                         )
@@ -150,6 +155,7 @@ fun PsycheAssistantApp() {
                                 "main" -> MainPage()
                                 "survey" -> SurveyPage(onBack = { currentScreen = "main" })
                                 "settings" -> AccountManagementPage()
+                                "activities" -> ActivityPage()
                             }
                         }
                     }

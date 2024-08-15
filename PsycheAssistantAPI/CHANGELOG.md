@@ -2,11 +2,18 @@
 - - - 
 
 > ### Author: Mads Søndergaard
-> ### Current version: 0.0.5
+> ### Current version: 0.0.6
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.0.6:
+> General
+> - Fleshed out Activity based logic (Controller, Service, Repository), and aligned front-end with API.
+> - Added functionality for fetching Activities based on Group
+> - Added functionality for creating an Activity.
+> - Added functionality for deleting/completing activities, albeit untested at this point.
+
 ### 0.0.5:
 > General
 > - Fine-tuned certain use cases such as removal of users

@@ -70,4 +70,10 @@
 
     <!-- Activities -->
     <string name="activities">Activities</string>
+    <string name="create_activity">Create activity</string>
+    <string name="select_date">Select date</string>
+    <string name="selected_date">Date:</string>
+    <string name="select_energy_cost">Energy Cost (0 to 10)</string>
+    <string name="energy_cost">Cost: %1$s</string>
+    <string name="description">Description</string>
 </resources>

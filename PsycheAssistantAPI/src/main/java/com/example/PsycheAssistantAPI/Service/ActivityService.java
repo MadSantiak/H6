@@ -9,12 +9,14 @@ import com.example.PsycheAssistantAPI.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-
 @Service
 public class ActivityService {
+
     @Autowired
     private ActivityRepository activityRepository;
 
@@ -24,29 +26,20 @@ public class ActivityService {
     @Autowired
     private GroupRepository groupRepository;
 
-    public List<Activity> findAll() { return activityRepository.findAll(); }
-    public Activity findById(int id) { return activityRepository.findById(id).orElse(null); }
+    public List<Activity> findAll() {
+        return activityRepository.findAll();
+    }
 
+    public Activity findById(int id) {
+        return activityRepository.findById(id).orElse(null);
+    }
 
-    public Activity createActivity(int userId, int groupId, String deadline) {
-        User creator = userRepository.findById(userId).orElse(null);
-        Group targetGroup = groupRepository.findById(groupId).orElse(null);
-        if (creator == null) {
-            throw new IllegalArgumentException("User not found");
-        }
-        if (targetGroup == null) {
-            throw new IllegalArgumentException("Group not found");
-        }
+    public Activity createActivity(User user, String deadline, String description, int energyCost) {
+        Group targetGroup = groupRepository.findById(user.getGroup().getId()).orElseThrow(() -> new IllegalArgumentException("Group not found"));
 
-        Activity activity = new Activity();
-        try {
-            LocalDateTime deadlineDateTime = LocalDateTime.parse(deadline);
-            activity.setDeadline(deadlineDateTime);
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid deadline format");
-        }
-        activity.setOwner(creator);
+        LocalDate deadlineDate = LocalDate.parse(deadline, DateTimeFormatter.ISO_LOCAL_DATE);
 
+        Activity activity = new Activity(user, description, energyCost, deadlineDate);
         Activity newActivity = activityRepository.save(activity);
 
         targetGroup.addActivity(newActivity);
@@ -55,5 +48,27 @@ public class ActivityService {
         return newActivity;
     }
 
+    public boolean completeActivity(int activityId) {
+        Activity activity = findById(activityId);
+        if (activity != null) {
+            activity.setCompleted(true);
+            activityRepository.save(activity);
+            return true;
+        }
+        return false;
+    }
 
+    public boolean deleteActivity(int activityId) {
+        Activity activity = findById(activityId);
+        if (activity != null) {
+            activityRepository.delete(activity);
+            return true;
+        }
+        return false;
+    }
+
+    public List<Activity> getActivitiesForGroupWithDeadline(int groupId, String date) {
+        LocalDate dateBoundary = LocalDate.parse(date);
+        return activityRepository.findActivitiesForGroupWithDeadline(groupId, dateBoundary);
+    }
 }

@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
-import org.psyche.assistant.Composable.User.UserItem
 import org.psyche.assistant.Model.User.User
 import psycheassistant.composeapp.generated.resources.*
 
