@@ -2,11 +2,16 @@
 - - - 
 
 > ### Author: Mads Søndergaard
-> ### Current version: 0.0.6
+> ### Current version: 0.0.7
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.0.7:
+> General
+> - Added further needed back-end functionality to facilitate better retrieval of activites and hence energy expenditure.
+>   Both in terms of User object and timeframe.
+
 ### 0.0.6:
 > General
 > - Fleshed out Activity based logic (Controller, Service, Repository), and aligned front-end with API.

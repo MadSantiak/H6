@@ -1,17 +1,13 @@
 package org.psyche.assistant.Composable.Pages
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.stringResource
+import org.psyche.assistant.Composable.Sections.EnergyOverviewSection
 import org.psyche.assistant.Composable.Sections.SurveyHistorySection
 import org.psyche.assistant.Model.SurveyRepository
-import psycheassistant.composeapp.generated.resources.Res
-import psycheassistant.composeapp.generated.resources.title
 
 /**
  * Main composable. Page meant to hold generalized information on how to use and interact with the app.
@@ -23,6 +19,7 @@ fun MainPage() {
     // Retrieve surveys from SQL Delight local storage.
     val db = SurveyRepository()
     var surveys by remember { mutableStateOf(db.selectAllSurveys()) }
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -36,8 +33,10 @@ fun MainPage() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(stringResource(Res.string.title), style = MaterialTheme.typography.h4)
-            Spacer(modifier = Modifier.height(16.dp))
+            EnergyOverviewSection()
+
+            Spacer(modifier = Modifier.height(32.dp))
+
             SurveyHistorySection(
                 surveys = surveys,
                 onDeleteSurvey = { surveyId ->
@@ -45,6 +44,7 @@ fun MainPage() {
                     surveys = db.selectAllSurveys()
                 }
             )
+
         }
     }
 }

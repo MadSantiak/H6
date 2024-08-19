@@ -1,14 +1,14 @@
 package org.psyche.assistant.Composable.Sections
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.stringResource
@@ -27,51 +27,68 @@ fun SurveyHistorySection(surveys: List<Survey>, onDeleteSurvey: (Long) -> Unit) 
     if (surveys.isEmpty()) {
         return
     }
-
-    Text(stringResource(Res.string.previous_results), style = MaterialTheme.typography.h6)
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(8.dp),
-        horizontalArrangement = Arrangement.Center
+    Box(
+        modifier = Modifier
+            .border(BorderStroke(1.dp, Color.Gray))
+            .fillMaxWidth()
+            .padding(bottom = 16.dp)
     ) {
-        Text(
-            text = stringResource(Res.string.date),
-            fontSize = 22.sp,
-            modifier = Modifier.weight(3f)
-        )
-        Text(
-            text = stringResource(Res.string.score),
-            fontSize = 22.sp,
-            modifier = Modifier.weight(1f)
-        )
-    }
-    surveys.sortedByDescending{it.date}.forEach { survey ->
-        val dateTime = survey.date?.let { DateFormatHelper.formatDateTime(it) }
-
-        // Note that we here assert that totalScore is not null, by using Kotlins not-null operator (!!)
-        val scoreColor = LevelColor.getColor(survey.totalScore!!)
-
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
-            horizontalArrangement = Arrangement.Center
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
         ) {
             Text(
-                text = dateTime.toString(),
-                fontSize = 16.sp,
-                modifier = Modifier.weight(3f)
+                stringResource(Res.string.survey),
+                style = MaterialTheme.typography.h4
             )
-            Text(
-                text = survey.totalScore.toString(),
-                fontSize = 16.sp,
-                modifier = Modifier.weight(1f),
-                color = scoreColor
-            )
-            Button(onClick = {
-                onDeleteSurvey(survey.id)
 
-            }) {
-                Text(stringResource(Res.string.delete))
+            Divider(modifier = Modifier
+                .height(4.dp))
+
+            Text(stringResource(Res.string.previous_results), style = MaterialTheme.typography.h6)
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = stringResource(Res.string.date),
+                    fontSize = 22.sp,
+                    modifier = Modifier.weight(3f)
+                )
+                Text(
+                    text = stringResource(Res.string.score),
+                    fontSize = 22.sp,
+                    modifier = Modifier.weight(1f)
+                )
+                Spacer(modifier = Modifier.width(40.dp))
+            }
+            surveys.sortedByDescending { it.date }.forEach { survey ->
+                val dateTime = survey.date?.let { DateFormatHelper.formatDateTime(it) }
+
+                // Note that we here assert that totalScore is not null, by using Kotlins not-null operator (!!)
+                val scoreColor = LevelColor.getColor(survey.totalScore!!)
+
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = dateTime.toString(),
+                        fontSize = 16.sp,
+                        modifier = Modifier.weight(3f)
+                    )
+                    Text(
+                        text = survey.totalScore.toString(),
+                        fontSize = 16.sp,
+                        modifier = Modifier.weight(1f),
+                        color = scoreColor
+                    )
+
+                    IconButton(onClick = { onDeleteSurvey(survey.id) }) {
+                        Icon(Icons.Filled.Delete, contentDescription = stringResource(Res.string.delete))
+                    }
+                }
             }
         }
     }
-
 }

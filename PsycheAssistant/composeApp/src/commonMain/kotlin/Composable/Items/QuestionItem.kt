@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import org.psyche.assistant.Model.QuestionModel
-import psycheassistant.composeapp.generated.resources.Res
 import psycheassistant.composeapp.generated.resources.*
 import roundToDecimals
 
@@ -22,13 +21,13 @@ import roundToDecimals
 @Composable
 fun QuestionItem(
     questionModel: QuestionModel,
-    onNext: (Float) -> Unit,
-    onBack: (Float) -> Unit,
+    onNext: (Double) -> Unit,
+    onBack: (Double) -> Unit,
     onCancel: () -> Unit,
     onSubmit: () -> Unit,
     questionModels: List<QuestionModel>) {
 
-    var sliderValue by remember { mutableStateOf(0f) }
+    var sliderValue by remember { mutableStateOf(0.0) }
 
     Column(
         modifier = Modifier
@@ -65,8 +64,8 @@ fun QuestionItem(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Slider(
-                        value = sliderValue,
-                        onValueChange = { sliderValue = it },
+                        value = sliderValue.toFloat(),
+                        onValueChange = { sliderValue = it.toDouble() },
                         valueRange = 0f..3f,
                         steps = 5,
                     )
@@ -85,7 +84,7 @@ fun QuestionItem(
                             Text(stringResource(Res.string.very_much))
                     }
                 }
-                Text(stringResource(Res.string.selected_score, sliderValue.toDouble().roundToDecimals(1)))
+                Text(stringResource(Res.string.selected_score, sliderValue.roundToDecimals(1)))
             }
         }
 
@@ -109,7 +108,7 @@ fun QuestionItem(
             } else {
                 Button(onClick = {
                     onBack(questionModel.value)
-                    questionModel.value = 0f
+                    questionModel.value = 0.0
                 }) {
                     Text(stringResource(Res.string.previous))
                 }

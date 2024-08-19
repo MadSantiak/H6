@@ -13,4 +13,10 @@ public interface ActivityRepository extends JpaRepository<Activity, Integer> {
     List<Activity> findActivitiesForGroupWithDeadline(
             @Param("groupId") int groupId,
             @Param("date") LocalDate date);
+
+    @Query("SELECT a FROM Activity a WHERE a.group.id = :groupId AND a.deadline BETWEEN :endDate AND :startDate")
+    List<Activity> findActivitiesForPeriod(
+            @Param("groupId") int groupId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate);
 }

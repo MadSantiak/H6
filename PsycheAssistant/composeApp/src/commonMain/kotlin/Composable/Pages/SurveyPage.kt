@@ -15,7 +15,7 @@ import org.psyche.assistant.JsonLoader
 import org.psyche.assistant.Model.SurveyModel
 import org.psyche.assistant.Model.SurveyRepository
 import psycheassistant.composeapp.generated.resources.Res
-import psycheassistant.composeapp.generated.resources.*
+import psycheassistant.composeapp.generated.resources.sum_score
 import roundToDecimals
 
 /**
@@ -50,7 +50,7 @@ fun SurveyPage(onBack: () -> Unit) {
                         currentQuestionIndex++ },
                     onBack = { value ->
                         score -= value
-                        questions[currentQuestionIndex].value = 0f
+                        questions[currentQuestionIndex].value = 0.0
                         currentQuestionIndex-- },
                     onCancel = onBack,
                     onSubmit = {

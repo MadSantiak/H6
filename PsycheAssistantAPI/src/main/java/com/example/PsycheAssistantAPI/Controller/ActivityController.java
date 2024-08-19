@@ -30,7 +30,9 @@ public class ActivityController {
 
 
     @GetMapping()
-    public List<Activity> getAllActivities() { return activityService.findAll(); }
+    public List<Activity> getAllActivities() {
+        return activityService.findAll();
+    }
 
     @GetMapping("/{id}")
     public Activity read(@PathVariable int id) {
@@ -64,13 +66,24 @@ public class ActivityController {
     }
 
     @PostMapping("/{id}/complete")
-    public ResponseEntity<Void> completeActivity(@PathVariable int id) {
-        boolean success = activityService.completeActivity(id);
-        return success ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Activity> completeActivity(@RequestHeader("Authorization") String authHeader, @PathVariable int id) {
+        ResponseEntity<User> userResponse = authHelper.validateAndGetUser(authHeader);
+        User user = userResponse.getBody();
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            Activity completedActivity = activityService.completeActivity(user, id);
+            return new ResponseEntity<>(completedActivity, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<Void> deleteActivity(@PathVariable int id) {
+    public ResponseEntity<Boolean> deleteActivity(@PathVariable int id) {
         boolean success = activityService.deleteActivity(id);
         return success ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -82,4 +95,15 @@ public class ActivityController {
         List<Activity> activities = activityService.getActivitiesForGroupWithDeadline(groupId, date);
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
+
+    @GetMapping("/group/{groupId}/period")
+    public ResponseEntity<List<Activity>> getPeriodActivitiesWithDeadline(
+            @PathVariable int groupId,
+            @RequestParam("startDate") String startDate,
+            @RequestParam("endDate") String endDate) {
+
+        List<Activity> activities = activityService.getByPeriod(groupId, startDate, endDate);
+        return new ResponseEntity<>(activities, HttpStatus.OK);
+    }
+
 }

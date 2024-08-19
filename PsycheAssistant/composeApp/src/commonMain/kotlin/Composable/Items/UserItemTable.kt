@@ -9,7 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.stringResource
 import org.psyche.assistant.Model.User.User
-import psycheassistant.composeapp.generated.resources.*
+import psycheassistant.composeapp.generated.resources.Res
+import psycheassistant.composeapp.generated.resources.day_and_week
+import psycheassistant.composeapp.generated.resources.energy_expenditure
+import psycheassistant.composeapp.generated.resources.member
 
 @Composable
 fun UserItemTable(
@@ -27,14 +30,22 @@ fun UserItemTable(
         ) {
             Text(
                 text = stringResource(Res.string.member),
-                style = MaterialTheme.typography.subtitle1,
-                modifier = Modifier.weight(1f)
+                style = MaterialTheme.typography.subtitle2,
+                modifier = Modifier.weight(2f)
             )
-            Text(
-                text = stringResource(Res.string.energy_expenditure),
-                style = MaterialTheme.typography.subtitle1,
+            Column(
                 modifier = Modifier.weight(1f)
-            )
+            ) {
+                Text(
+                    text = stringResource(Res.string.energy_expenditure),
+                    style = MaterialTheme.typography.subtitle2,
+
+                )
+                Text(
+                    text = stringResource(Res.string.day_and_week),
+                    style = MaterialTheme.typography.subtitle2,
+                )
+            }
             if (showKickButton) {
                 Spacer(modifier = Modifier.width(40.dp)) // Space for the Kick button
             }

@@ -48,14 +48,16 @@ public class ActivityService {
         return newActivity;
     }
 
-    public boolean completeActivity(int activityId) {
+    public Activity completeActivity(User user, int activityId) {
         Activity activity = findById(activityId);
         if (activity != null) {
             activity.setCompleted(true);
+            activity.setHandledBy(user);
+            activity.setHandledOn(LocalDate.now());
             activityRepository.save(activity);
-            return true;
+            return activity;
         }
-        return false;
+        return null;
     }
 
     public boolean deleteActivity(int activityId) {
@@ -70,5 +72,11 @@ public class ActivityService {
     public List<Activity> getActivitiesForGroupWithDeadline(int groupId, String date) {
         LocalDate dateBoundary = LocalDate.parse(date);
         return activityRepository.findActivitiesForGroupWithDeadline(groupId, dateBoundary);
+    }
+
+    public List<Activity> getByPeriod(int groupId, String startDate, String endDate) {
+        LocalDate dateStart = LocalDate.parse(startDate);
+        LocalDate dateEnd = LocalDate.parse(endDate);
+        return activityRepository.findActivitiesForPeriod(groupId, dateStart, dateEnd);
     }
 }

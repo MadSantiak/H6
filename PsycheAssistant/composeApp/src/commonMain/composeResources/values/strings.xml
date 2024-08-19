@@ -2,6 +2,7 @@
     <string name="title">Psyche Assistant</string>
     <string name="home">Home</string>
     <string name="survey">Survey</string>
+    <string name="survey_history">Survey History</string>
     <string name="question_of_template">Question %1$d of %2$d</string>
     <string name="not_at_all">Not at all</string>
     <string name="very_much">Very much so</string>
@@ -36,6 +37,7 @@
     <string name="score">Score</string>
     <string name="delete">Delete</string>
     <string name="no_connection">Error: Could not connect to server</string>
+    <string name="okay">OK</string>
 
     <!-- Settings -->
     <string name="settings">Settings</string>
@@ -65,15 +67,23 @@
     <string name="member_label">Member: %1$s</string>
     <string name="members_amount">Member amount: %1$s</string>
     <string name="energy_expenditure">Energy Expenditure</string>
+    <string name="day_and_week">day/week</string>
     <string name="energy_expenditure_label">Energy Expenditure: %1$d</string>
     <string name="you">You</string>
 
     <!-- Activities -->
     <string name="activities">Activities</string>
+    <string name="activity">Activity</string>
     <string name="create_activity">Create activity</string>
+    <string name="complete">Complete</string>
     <string name="select_date">Select date</string>
     <string name="selected_date">Date:</string>
     <string name="select_energy_cost">Energy Cost (0 to 10)</string>
+    <string name="energy">Energy Cost:</string>
     <string name="energy_cost">Cost: %1$s</string>
+    <string name="energy_consumption">Energy consumption per day</string>
+    <string name="today">Today: %1$s</string>
+    <string name="past_week">Past week: %1$s</string>
     <string name="description">Description</string>
+    <string name="missing_group_warning">Please log in and create or join a group before creating an activity.</string>
 </resources>

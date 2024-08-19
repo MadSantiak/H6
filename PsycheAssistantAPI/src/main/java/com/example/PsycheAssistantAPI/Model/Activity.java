@@ -39,8 +39,9 @@ public class Activity {
     @ToString.Exclude
     private User owner;
 
-    @OneToOne
+    @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
+    @ToString.Exclude
     private User handledBy = null;
 
     private LocalDate deadline;

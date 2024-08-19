@@ -2,11 +2,20 @@
 - - -
 
 > ### Author: Mads Søndergaard 
-> ### Current version: 0.1.5
+> ### Current version: 0.1.6
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.1.6:
+> General
+> - Worked on finishing touches for activity integration, i.e. fetching completed activities, deleting and completing them
+> - Worked on integrating activity integration into new and existing views for better clarity
+>   - Note that the User models "energyExpenditure" attribute is now deprecated, as it is instead extrapolated
+>     from the summation of activities for the day/period.
+> - Slight refactoring of views so that MainPage now has sections for both Energy Consumption and Survey History
+> - And the above is more clearly reflected in the code structure.
+
 ### 0.1.5:
 > General
 > - Fleshed out activity-based views, including dialogs for creation, precursor to list views, etc.

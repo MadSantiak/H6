@@ -13,7 +13,22 @@ import org.psyche.assistant.Model.Activity.ActivityRepository
 class ActivityService : ActivityRepository {
     private val client = HttpClient()
 
-    override suspend fun getTodayActivityForGroup(groupId: Int, today: LocalDate): List<Activity> {
+    override suspend fun getActivityByPeriod(groupId: Int, startDate: LocalDate, endDate: LocalDate): List<Activity> {
+        val url = ServiceBuilder.url("api/activities/group/$groupId/period?startDate=${startDate.toString()}&endDate=${endDate.toString()}")
+        val response: HttpResponse = client.get(url) {
+            contentType(ContentType.Application.Json)
+        }
+
+        return when (response.status) {
+            HttpStatusCode.OK -> {
+                val responseBody = response.bodyAsText()
+                Json.decodeFromString<List<Activity>>(responseBody)
+            }
+            else -> emptyList()
+        }
+    }
+
+    override suspend fun getActivityForToday(groupId: Int, today: LocalDate): List<Activity> {
         val url = ServiceBuilder.url("api/activities/group/$groupId?date=${today.toString()}")
         val response: HttpResponse = client.get(url) {
             contentType(ContentType.Application.Json)
@@ -71,11 +86,34 @@ class ActivityService : ActivityRepository {
         }
     }
 
-    override suspend fun completeActivity(activityId: Int) {
-        TODO("Not yet implemented")
+    override suspend fun completeActivity(authToken: String, activityId: Int): Activity? {
+        val url = ServiceBuilder.url("api/activities/$activityId/complete")
+        val response: HttpResponse = client.post(url) {
+            contentType(ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer $authToken")
+        }
+
+        return when (response.status) {
+            HttpStatusCode.OK -> {
+                val responseBody = response.bodyAsText()
+                Json.decodeFromString<Activity>(responseBody)
+            }
+            else -> null
+        }
     }
 
-    override suspend fun deleteActivity(activityId: Int) {
-        TODO("Not yet implemented")
+    override suspend fun deleteActivity(activityId: Int): Boolean {
+        val url = ServiceBuilder.url("api/activities/$activityId/delete")
+        val response: HttpResponse = client.delete(url) {
+            contentType(ContentType.Application.Json)
+        }
+
+        return when (response.status) {
+            HttpStatusCode.OK -> {
+                val responseBody = response.bodyAsText()
+                Json.decodeFromString<Boolean>(responseBody)
+            }
+            else -> false
+        }
     }
 }

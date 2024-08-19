@@ -1,33 +1,72 @@
 package org.psyche.assistant.Composable.Items
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.stringResource
 import org.psyche.assistant.Model.Activity.Activity
+import psycheassistant.composeapp.generated.resources.Res
+import psycheassistant.composeapp.generated.resources.complete
+import psycheassistant.composeapp.generated.resources.delete
 
 @Composable
-fun ActivityItem(activity: Activity) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .border(1.dp, Color.Gray)
-            .padding(8.dp)
+fun ActivityItem(
+    activity: Activity,
+    onCompleteClick: (Activity) -> Unit,
+    onDeleteClick: (Activity) -> Unit,
     ) {
+
+    Row(
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            // if the activity is completed, append a second modifier in order to strike through the entire row.
+            .then(
+                if (activity.completed) Modifier.drawBehind {
+                    val strokeWidth = 2.dp.toPx()
+                    val yOffset = size.height / 2
+                    drawLine(
+                        color = Color.Gray,
+                        start = androidx.compose.ui.geometry.Offset(0f, yOffset),
+                        end = androidx.compose.ui.geometry.Offset(size.width, yOffset),
+                        strokeWidth = strokeWidth
+                    )
+                } else Modifier
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+
+        )
+    {
         Text(
-            text = "Description: ${activity.description}",
-            style = MaterialTheme.typography.body1
+            text = activity.description,
+            style = MaterialTheme.typography.body1,
+            modifier = Modifier
+                    .weight(2f)
         )
         Text(
-            text = "Energy Cost: ${activity.energyCost}",
-            style = MaterialTheme.typography.body2
+            text = activity.energyCost.toString(),
+            style = MaterialTheme.typography.body2,
+            modifier = Modifier
+                .weight(1f)
         )
+        IconButton(onClick = { onCompleteClick(activity) }) {
+            Icon(Icons.Filled.Check, contentDescription = stringResource(Res.string.complete))
+        }
+        IconButton(onClick = { onDeleteClick(activity) }) {
+            Icon(Icons.Filled.Delete, contentDescription = stringResource(Res.string.delete))
+        }
     }
 }
