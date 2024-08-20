@@ -2,11 +2,17 @@
 - - -
 
 > ### Author: Mads Søndergaard 
-> ### Current version: 0.1.6
+> ### Current version: 0.2.0
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.2.0:
+> General
+> - Moved to major change as the application now fulfills all major primary milestones
+> - Added visualization of energy consumption on a weekly basis
+> - Minor adjustment to view definitions to ensure scrolling was available on pages where it would likely be necessary.
+
 ### 0.1.6:
 > General
 > - Worked on finishing touches for activity integration, i.e. fetching completed activities, deleting and completing them

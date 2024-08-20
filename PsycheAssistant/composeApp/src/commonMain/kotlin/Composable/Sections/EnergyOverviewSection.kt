@@ -15,10 +15,12 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
 import network.chaintech.kmp_date_time_picker.utils.now
 import org.jetbrains.compose.resources.stringResource
+import org.psyche.assistant.Composable.Components.EnergyExpenditureChart
 import org.psyche.assistant.Composable.LocalAuthToken
 import org.psyche.assistant.Composable.LocalGroup
 import org.psyche.assistant.Composable.LocalUser
 import org.psyche.assistant.Controller.ActivityController
+import org.psyche.assistant.Model.Activity.Activity
 import org.psyche.assistant.Model.User.User
 import psycheassistant.composeapp.generated.resources.*
 import roundToDecimals
@@ -32,6 +34,8 @@ fun EnergyOverviewSection(simple: Boolean = false, specificUser: User? = null) {
 
     // User is converted to variable so it can be reassigned, based on whether a specific user is passed to the function.
     var user = LocalUser.current
+    var weeklyActivities by remember { mutableStateOf<Map<String, List<Activity>>>(emptyMap()) }
+
 
     var energyExpenditure by remember { mutableStateOf(0.0) }
     var energyExpenditureToday by remember { mutableStateOf(0.0) }
@@ -47,15 +51,17 @@ fun EnergyOverviewSection(simple: Boolean = false, specificUser: User? = null) {
     LaunchedEffect(authToken) {
         if (authToken.value != null) {
             try {
-                var weekylActivities = activityController.getActivityByPeriod(group.value!!.id, LocalDate.now(), LocalDate.now().minus(
-                    DatePeriod(days = 7)
+                var activities = activityController.getActivityByPeriod(
+                    group.value!!.id,
+                    LocalDate.now(),
+                    LocalDate.now().minus(DatePeriod(days = 7)
                 ))
 
-                weekylActivities.forEach { activity ->
+                activities.forEach { activity ->
                     energyExpenditureToday += if (activity.handledOn == LocalDate.now() && activity.completed && activity.handledById == user.value?.id) activity.energyCost else 0
                     energyExpenditure += if (activity.completed && activity.handledById == user.value?.id) activity.energyCost else 0
                 }
-
+                weeklyActivities = activities.filter { it.completed && it.handledById == user.value?.id}.groupBy {it.handledOn.toString()}
 
             } catch (e: Exception) {
                 errorMessage = e.message ?: unknownError
@@ -95,7 +101,10 @@ fun EnergyOverviewSection(simple: Boolean = false, specificUser: User? = null) {
                 Text(
                     stringResource(Res.string.past_week, (energyExpenditure / 7).roundToDecimals(1))
                 )
+                EnergyExpenditureChart(data = weeklyActivities)
             }
+
         }
+
     }
 }

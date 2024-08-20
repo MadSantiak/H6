@@ -1,9 +1,6 @@
 package org.psyche.assistant.Composable.Pages
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
@@ -13,7 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import network.chaintech.kmp_date_time_picker.utils.now
 import org.jetbrains.compose.resources.stringResource
 import org.psyche.assistant.Composable.Dialogs.ActivityCreateDialog
@@ -31,6 +31,7 @@ fun ActivityPage() {
     val activityController = ActivityController()
     val coroutineScope = rememberCoroutineScope()
 
+    var currentDate by remember { mutableStateOf(LocalDate.now())}
     var activities by remember { mutableStateOf<List<Activity>>(emptyList())}
 
     var isWarningDialogOpen by remember { mutableStateOf(false) }
@@ -41,11 +42,11 @@ fun ActivityPage() {
     var unknownError = stringResource(Res.string.unknown_error)
 
 
-    LaunchedEffect(authToken.value, activities) {
+    LaunchedEffect(authToken.value, activities, currentDate) {
         if (authToken.value != null) {
             isLoading = true
             try {
-                activities = activityController.getActivityForToday(group.value!!.id, LocalDate.now())
+                activities = activityController.getActivityForToday(group.value!!.id, currentDate)
             } catch (e: Exception) {
                 errorMessage = e.message ?: unknownError
             } finally {
@@ -97,6 +98,21 @@ fun ActivityPage() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+
+            Button(onClick = { currentDate = currentDate.minus(DatePeriod(days = 1)) }) {
+                Text("<")
+            }
+
+            Text(currentDate.toString(), modifier = Modifier.align(Alignment.CenterVertically))
+            Button(onClick = { currentDate = currentDate.plus(DatePeriod(days = 1)) }) {
+                Text(">")
+            }
+        }
+
         Button(onClick = {
             if (group.value == null) {
                 isWarningDialogOpen = true

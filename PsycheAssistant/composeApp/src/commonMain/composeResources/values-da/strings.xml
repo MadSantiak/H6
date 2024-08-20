@@ -81,9 +81,10 @@
     <string name="select_energy_cost">Energiomkostning (0 til 10)</string>
     <string name="energy">Energiomkostning</string>
     <string name="energy_cost">Omkostning: %1$s</string>
-    <string name="energy_consumption">Energiforbrug per dag</string>
+    <string name="energy_consumption">Energiforbrug</string>
     <string name="today">I dag: %1$s</string>
-    <string name="past_week">Seneste uge: %1$s</string>
+    <string name="past_week">Ugentlig gennemsnit: %1$s</string>
     <string name="description">Beskrivelse</string>
     <string name="missing_group_warning">Venligst log ind og opret eller deltag i en gruppe, før du opretter aktiviteter.</string>
+    <string name="weekly_overview">Ugentlig oversigt</string>
 </resources>

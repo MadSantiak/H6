@@ -1,6 +1,8 @@
 package org.psyche.assistant.Composable.Pages
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,31 +22,25 @@ fun MainPage() {
     val db = SurveyRepository()
     var surveys by remember { mutableStateOf(db.selectAllSurveys()) }
 
-
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            EnergyOverviewSection()
+        EnergyOverviewSection()
 
-            Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(32.dp))
+        SurveyHistorySection(
+            surveys = surveys,
+            onDeleteSurvey = { surveyId ->
+                db.deleteSurveyById(surveyId)
+                surveys = db.selectAllSurveys()
+            }
+        )
 
-            SurveyHistorySection(
-                surveys = surveys,
-                onDeleteSurvey = { surveyId ->
-                    db.deleteSurveyById(surveyId)
-                    surveys = db.selectAllSurveys()
-                }
-            )
-
-        }
     }
+
 }

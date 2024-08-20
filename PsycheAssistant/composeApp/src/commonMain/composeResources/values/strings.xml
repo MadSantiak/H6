@@ -81,9 +81,12 @@
     <string name="select_energy_cost">Energy Cost (0 to 10)</string>
     <string name="energy">Energy Cost:</string>
     <string name="energy_cost">Cost: %1$s</string>
-    <string name="energy_consumption">Energy consumption per day</string>
+    <string name="energy_consumption">Energy consumption</string>
     <string name="today">Today: %1$s</string>
-    <string name="past_week">Past week: %1$s</string>
+    <string name="past_week">Weekly average: %1$s</string>
+    <string name="previous_day">Previous</string>
+    <string name="next_day">Next</string>
     <string name="description">Description</string>
     <string name="missing_group_warning">Please log in and create or join a group before creating an activity.</string>
+    <string name="weekly_overview">Weekly overview</string>
 </resources>
