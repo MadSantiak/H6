@@ -2,11 +2,41 @@
 - - -
 
 > ### Author: Mads Søndergaard 
-> ### Current version: 0.1.3
+> ### Current version: 0.2.0
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.2.0:
+> General
+> - Moved to major change as the application now fulfills all major primary milestones
+> - Added visualization of energy consumption on a weekly basis
+> - Minor adjustment to view definitions to ensure scrolling was available on pages where it would likely be necessary.
+
+### 0.1.6:
+> General
+> - Worked on finishing touches for activity integration, i.e. fetching completed activities, deleting and completing them
+> - Worked on integrating activity integration into new and existing views for better clarity
+>   - Note that the User models "energyExpenditure" attribute is now deprecated, as it is instead extrapolated
+>     from the summation of activities for the day/period.
+> - Slight refactoring of views so that MainPage now has sections for both Energy Consumption and Survey History
+> - And the above is more clearly reflected in the code structure.
+
+### 0.1.5:
+> General
+> - Fleshed out activity-based views, including dialogs for creation, precursor to list views, etc.
+> - Refactored project structure, including the structure belonging to the proof-of-concept version of the project.
+> - Corrected some of the API communication in terms of how data is processed front-end before being sent to back-end
+>   - Note the single-source-of-truth is kept in Backend, but verification is still carried out in front-end
+
+
+### 0.1.4:
+> General
+> - Tested various use cases for logical holes, patched in both front- and back-end.
+> - Refactored views so file structure is more readable and easier to maintain/edit
+> - Improved clarity on UI/UX in terms of user overview for groups, navigation, and the like.
+> - Further implemented Activity model and relation to other models (User/Group)
+
 ### 0.1.3:
 > General
 > - Further polish to UI/UX

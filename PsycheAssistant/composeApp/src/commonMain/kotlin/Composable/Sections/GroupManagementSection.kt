@@ -1,8 +1,7 @@
-package org.psyche.assistant.Composable.Settings
+package org.psyche.assistant.Composable.Sections
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -10,17 +9,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.psyche.assistant.Composable.Items.UserItemTable
 import org.psyche.assistant.Controller.GroupController
 import org.psyche.assistant.Composable.LocalAuthToken
 import org.psyche.assistant.Composable.LocalGroup
 import org.psyche.assistant.Composable.LocalUser
-import org.psyche.assistant.Composable.User.UserItem
 import org.psyche.assistant.Controller.UserController
 import org.psyche.assistant.Model.User.User
 import psycheassistant.composeapp.generated.resources.*
 
 @Composable
-fun GroupManagementPage() {
+fun GroupManagementSection() {
     val coroutineScope = rememberCoroutineScope()
     val groupController = GroupController()
     val userController = UserController()
@@ -38,8 +37,9 @@ fun GroupManagementPage() {
     var unknownError = stringResource(Res.string.unknown_error)
     var failedToKick = stringResource(Res.string.failed_to_kick_member)
     var noCodeOrAuth = stringResource(Res.string.no_code_or_auth)
+    var membersAmount = stringResource(Res.string.members_amount, members.size)
 
-    LaunchedEffect(authToken.value, group.value?.id) {
+    LaunchedEffect(authToken.value, group.value?.id, members) {
         if (authToken.value != null && group.value != null) {
             isLoading = true
             try {
@@ -47,10 +47,8 @@ fun GroupManagementPage() {
                 group.value = groupDetails
                 var groupOwner = userController.getUserById(groupDetails?.ownerId!!)
                 isOwner = groupOwner?.id == user.value?.id
-                // Fetch user details, if nothing found, remain empty list.
-                members = groupDetails?.userIds?.mapNotNull { userId ->
-                    userController.getUserById(userId)
-                } ?: emptyList()
+                members = groupDetails.userIds
+                    .mapNotNull { userId -> userController.getUserById(userId) }
             } catch (e: Exception) {
                 errorMessage = e.message ?: unknownError
             } finally {
@@ -139,6 +137,7 @@ fun GroupManagementPage() {
 
 
         }
+        Text(text = membersAmount)
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -149,11 +148,13 @@ fun GroupManagementPage() {
                     Text(text = stringResource(Res.string.no_members))
                 }
             } else {
-                items(members) { member ->
-                    UserItem(
-                        user = member,
+                item {
+                    UserItemTable(
+                        users = members,
                         onKickClick = { user -> kickMember(user) },
-                        showKickButton = isOwner
+                        showKickButton = isOwner,
+                        currentUserId = user.value?.id,
+                        ownerId = group.value?.ownerId
                     )
                 }
             }

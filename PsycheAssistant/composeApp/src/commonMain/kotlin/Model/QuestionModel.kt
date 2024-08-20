@@ -14,5 +14,5 @@ data class QuestionModel(
     val type: String = "numeric",
     val options: List<String>? = null,
     var surveyModel: SurveyModel?,
-    var value: Float = 0f,
+    var value: Double = 0.0,
 )

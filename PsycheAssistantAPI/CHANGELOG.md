@@ -2,11 +2,29 @@
 - - - 
 
 > ### Author: Mads Søndergaard
-> ### Current version: 0.0.4
+> ### Current version: 0.0.7
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.0.7:
+> General
+> - Added further needed back-end functionality to facilitate better retrieval of activites and hence energy expenditure.
+>   Both in terms of User object and timeframe.
+
+### 0.0.6:
+> General
+> - Fleshed out Activity based logic (Controller, Service, Repository), and aligned front-end with API.
+> - Added functionality for fetching Activities based on Group
+> - Added functionality for creating an Activity.
+> - Added functionality for deleting/completing activities, albeit untested at this point.
+
+### 0.0.5:
+> General
+> - Fine-tuned certain use cases such as removal of users
+> - Patched logical hole which caused recursion when fetching users/groups
+> - Implemented more logic related to Activities.
+ 
 ### 0.0.4:
 > General
 > - Polished user manipulation of group content

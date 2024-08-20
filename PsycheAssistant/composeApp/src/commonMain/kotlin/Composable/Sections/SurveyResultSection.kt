@@ -1,4 +1,4 @@
-package org.psyche.assistant.Composable.Survey
+package org.psyche.assistant.Composable.Sections
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
@@ -24,7 +24,7 @@ import org.psyche.assistant.Helper.LevelColor
  * on the SurveyPage.
  */
 @Composable
-fun ResultView(surveyModel: SurveyModel) {
+fun SurveyResultSection(surveyModel: SurveyModel) {
 
     val scoreColor = LevelColor.getColor(surveyModel.totalScore)
 

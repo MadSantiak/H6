@@ -5,6 +5,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 object DateFormatHelper {
+
      fun formatDateTime(isoDateTimeString: String): String {
         // Parse the ISO 8601 date-time string
         val instant = Instant.parse(isoDateTimeString)

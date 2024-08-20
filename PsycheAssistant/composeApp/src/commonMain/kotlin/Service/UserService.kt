@@ -14,9 +14,24 @@ class UserService : UserRepository {
 
     override suspend fun getUserDetails(authToken: String): User? {
         val url = ServiceBuilder.url("api/users/me")
-        val response: HttpResponse = client.get(url) {
+        var response: HttpResponse = client.get(url) {
             header(HttpHeaders.Authorization, "Bearer $authToken")
         }
+
+        if (response.status == HttpStatusCode.Unauthorized) {
+            // Token might be expired, try to refresh it
+            val newToken = refreshToken()
+            if (newToken != null) {
+                AuthStorage.saveAuthToken(newToken)
+                response = client.get(url) {
+                    header(HttpHeaders.Authorization, "Bearer $newToken")
+                }
+            } else {
+                // Refresh token failed or is not available
+                throw Exception("Token refresh failed, user needs to log in again")
+            }
+        }
+
         return when (response.status) {
             HttpStatusCode.OK -> {
                 val responseBody = response.bodyAsText()
@@ -51,9 +66,18 @@ class UserService : UserRepository {
             setBody("email=$email&password=$password")
         }
         if (response.status == HttpStatusCode.OK) {
-            val token = response.bodyAsText()
-            AuthStorage.saveAuthToken(token) // Save the token
-            return token
+            val responseBody = response.bodyAsText()
+            val tokens = Json.decodeFromString<Map<String, String>>(responseBody)
+            val accessToken = tokens["accessToken"]
+            val refreshToken = tokens["refreshToken"]
+
+            if (accessToken != null && refreshToken != null) {
+                AuthStorage.saveAuthToken(accessToken)
+                AuthStorage.saveRefreshToken(refreshToken)
+                return accessToken
+            } else {
+                throw Exception("Invalid login response")
+            }
         } else {
             throw Exception(response.bodyAsText())
         }
@@ -61,6 +85,7 @@ class UserService : UserRepository {
 
     override suspend fun logoutUser() {
         AuthStorage.removeAuthToken()
+        AuthStorage.removeRefreshToken()
     }
 
     override suspend fun getUserById(id: Int): User? {
@@ -74,6 +99,25 @@ class UserService : UserRepository {
                 Json.decodeFromString<User>(responseBody)
             }
             else -> null
+        }
+    }
+
+    private suspend fun refreshToken(): String? {
+        val refreshToken = AuthStorage.getRefreshToken() ?: return null
+
+        val url = ServiceBuilder.url("api/auth/refresh-token")
+        val response: HttpResponse = client.post(url) {
+            header(HttpHeaders.Authorization, "Bearer $refreshToken")
+        }
+
+        return if (response.status == HttpStatusCode.OK) {
+            val newAccessToken = response.bodyAsText() // Assuming the server returns a new access token
+            newAccessToken
+        } else {
+            // Handle refresh token failure
+            AuthStorage.removeAuthToken()
+            AuthStorage.removeRefreshToken()
+            null
         }
     }
 
