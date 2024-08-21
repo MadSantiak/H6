@@ -1,11 +1,14 @@
 package com.example.PsycheAssistantAPI.Service;
 
+import com.example.PsycheAssistantAPI.Model.Activity;
 import com.example.PsycheAssistantAPI.Model.Group;
 import com.example.PsycheAssistantAPI.Model.User;
+import com.example.PsycheAssistantAPI.Repository.ActivityRepository;
 import com.example.PsycheAssistantAPI.Repository.GroupRepository;
 import com.example.PsycheAssistantAPI.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +21,9 @@ public class GroupService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ActivityRepository activityRepository;
 
     public List<Group> findAll() { return groupRepository.findAll(); }
     public Group findById(int id) { return groupRepository.findById(id).orElse(null); }
@@ -64,9 +70,33 @@ public class GroupService {
             throw new RuntimeException("User is not a member of the group");
         }
         group.removeUser(user);
+
+        if (user == group.getOwner())
+        {
+            group.setOwner(null);
+        }
+
         groupRepository.save(group);
 
         return group;
+    }
+
+    @Transactional
+    public void deleteGroup(int groupId) {
+        Group group = findById(groupId);
+        if (group != null) {
+            List<User> users = group.getUsers();
+            for (User user : users) {
+                user.setGroup(null);
+                userRepository.save(user);
+            }
+            List<Activity> activities = group.getActivities();
+            for (Activity activity : activities) {
+                activity.setGroup(null);
+                activityRepository.save(activity);
+            }
+            groupRepository.delete(group);
+        }
     }
 
     private String generateUniqueCode() {

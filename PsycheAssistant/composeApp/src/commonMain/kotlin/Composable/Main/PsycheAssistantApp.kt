@@ -32,6 +32,11 @@ import org.psyche.assistant.Model.User.User
 import org.psyche.assistant.Storage.AuthStorage
 import psycheassistant.composeapp.generated.resources.*
 
+/**
+ * Psyche assistant app
+ * The main entry point for the application.
+ * Mainly responsible for establishing the apps theme, navigation bar/function, as well as gathering initial data.
+ */
 @Composable
 fun PsycheAssistantApp() {
     var currentScreen by remember { mutableStateOf("main") }
@@ -44,6 +49,7 @@ fun PsycheAssistantApp() {
     var isError by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
 
+    // Asynchronous operation that monitors the given value for changes, executing the function when change occurs.
     LaunchedEffect(authToken.value) {
         if (authToken.value != null) {
             try {
@@ -66,12 +72,14 @@ fun PsycheAssistantApp() {
     MaterialTheme(
         colors = CustomTheme.psycheColors()
     ) {
+        // pass critical values to the rest of the composable tree. I.e. share data with other pages/composable functions.
         CompositionLocalProvider(
             LocalAuthToken provides authToken,
             LocalUser provides userState,
             LocalGroup provides groupState
         ) {
             Scaffold(
+                // Add a top bar which will act as a "Home" button, due to space constraint in the bottom bar.
                 topBar = {
                     Box(
                         modifier = Modifier
@@ -97,6 +105,7 @@ fun PsycheAssistantApp() {
                         )
                     }
                 },
+                // Add bottom bar for general navigation.
                 bottomBar = {
                     BottomNavigation {
                         BottomNavigationItem(
@@ -142,6 +151,7 @@ fun PsycheAssistantApp() {
 
                     }
                 },
+                // Main component for holding the actual content of the application, i.e. the various pages "inside" the layout.
                 content = { innerPadding ->
                     if (isLoading) {
                         LoadingScreen()
@@ -162,15 +172,15 @@ fun PsycheAssistantApp() {
                 }
             )
 
-            // Error dialog
+            // Error dialog, used to explicitly but non-intrusively inform the user about an issue during app initialization.
             if (isError) {
                 AlertDialog(
-                    onDismissRequest = { isError = false }, // Hide the dialog when the user clicks outside
+                    onDismissRequest = { isError = false },
                     title = { Text(stringResource(Res.string.no_connection)) },
                     text = { Text(errorMessage) },
                     confirmButton = {
                         Button(
-                            onClick = { isError = false } // Hide the dialog when the user clicks "OK"
+                            onClick = { isError = false }
                         ) {
                             Text("OK")
                         }

@@ -24,6 +24,13 @@ import org.psyche.assistant.Controller.ActivityController
 import org.psyche.assistant.Model.Activity.Activity
 import psycheassistant.composeapp.generated.resources.*
 
+/**
+ * Activity page
+ * Used to administrate activities, ensuring the list of activities are updated when needed,
+ * that they can be created/completed/deleted, and that the user can paginate through dates to see activities from other days.
+ * Note that if they choose to complete activities from a different date, the activation counts for the day they were completed,
+ * not the deadline they had.
+ */
 @Composable
 fun ActivityPage() {
     val authToken = LocalAuthToken.current
@@ -40,7 +47,7 @@ fun ActivityPage() {
 
     var errorMessage by remember { mutableStateOf("") }
     var unknownError = stringResource(Res.string.unknown_error)
-
+    var failedDeleteError = stringResource(Res.string.failed_delete_activity)
 
     LaunchedEffect(authToken.value, activities, currentDate) {
         if (authToken.value != null) {
@@ -55,6 +62,11 @@ fun ActivityPage() {
         }
     }
 
+    /**
+     * Complete activity
+     * Launches asynchronous operation to mark the activity as completed by the current user (i.e. matching the authToken)
+     * @param activity
+     */
     fun completeActivity(activity: Activity) {
         coroutineScope.launch {
             try {
@@ -73,15 +85,21 @@ fun ActivityPage() {
         }
     }
 
+    /**
+     * Delete activity
+     * Launches asynchronous operation to delete the activity.
+     * @param activity
+     */
     fun deleteActivity(activity: Activity) {
         coroutineScope.launch {
             try {
                 isLoading = true
-                val result = activityController.deleteActivity(activity.id)
-                if (result != null) {
-                    activities = activities.filter { it.id != activity.id }
+                val activityId = activity.id
+                val result = activityController.deleteActivity(authToken.value!!, activity.id)
+                if (result) {
+                    activities = activities.filter { it.id != activityId }
                 } else {
-                    errorMessage = "Herp"
+                    errorMessage = failedDeleteError
                 }
             } catch (e: Exception) {
                 errorMessage = e.message ?: unknownError
@@ -123,6 +141,7 @@ fun ActivityPage() {
             Text(stringResource(Res.string.create_activity))
         }
 
+        // Add a scrollable column for the activities
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -140,6 +159,7 @@ fun ActivityPage() {
         }
     }
 
+    // Call the Create Activity dialog when the boolean changes, and change it back once the create dialog is dismissed.
     if (isDialogOpen) {
         ActivityCreateDialog(
             onDismiss = { isDialogOpen = false },

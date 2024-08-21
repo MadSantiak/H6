@@ -14,6 +14,18 @@ import psycheassistant.composeapp.generated.resources.day_and_week
 import psycheassistant.composeapp.generated.resources.energy_expenditure
 import psycheassistant.composeapp.generated.resources.member
 
+/**
+ * User item table
+ * Composable used to display a list of users in a table structure, calling UserItem on each individual user in order to popualte the rows.
+ * Note here there are additional parameters to control visibility of Kick-functionality on each user, avoiding showing the option to others
+ * than the group owner (and on the group owner themselves, if so).
+ * @param users
+ * @param onKickClick
+ * @param showKickButton
+ * @param currentUserId
+ * @param ownerId
+ * @param modifier
+ */
 @Composable
 fun UserItemTable(
     users: List<User>,

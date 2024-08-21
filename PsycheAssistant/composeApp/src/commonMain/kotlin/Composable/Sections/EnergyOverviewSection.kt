@@ -25,23 +25,29 @@ import org.psyche.assistant.Model.User.User
 import psycheassistant.composeapp.generated.resources.*
 import roundToDecimals
 
+/**
+ * Energy overview section
+ * Used to display user-specific energy expenditure values, if specified.
+ * It can be used to display a simplified summation of daily/weekly avg. expenditure, or a more detailed
+ * version including graph visualization, determined by whether the function is explicitly called with "simple=true".
+ * If it's called with a specificUser designated, this overwrites the logged-in user, used when generating list-views of group members.
+ * @param simple
+ * @param specificUser
+ */
 @Composable
 fun EnergyOverviewSection(simple: Boolean = false, specificUser: User? = null) {
     // Values to fetch relevant completed activities, and show today's energy expenditure.
     val authToken = LocalAuthToken.current
     val group = LocalGroup.current
     val activityController = ActivityController()
+    val unknownError = stringResource(Res.string.unknown_error)
 
     // User is converted to variable so it can be reassigned, based on whether a specific user is passed to the function.
     var user = LocalUser.current
     var weeklyActivities by remember { mutableStateOf<Map<String, List<Activity>>>(emptyMap()) }
-
-
     var energyExpenditure by remember { mutableStateOf(0.0) }
     var energyExpenditureToday by remember { mutableStateOf(0.0) }
     var errorMessage by remember { mutableStateOf("") }
-    var unknownError = stringResource(Res.string.unknown_error)
-
     var isLoading by remember { mutableStateOf(false) }
 
     if (specificUser != null)
@@ -51,7 +57,7 @@ fun EnergyOverviewSection(simple: Boolean = false, specificUser: User? = null) {
     LaunchedEffect(authToken) {
         if (authToken.value != null) {
             try {
-                var activities = activityController.getActivityByPeriod(
+                var activities = activityController.getHandledActivityByPeriod(
                     group.value!!.id,
                     LocalDate.now(),
                     LocalDate.now().minus(DatePeriod(days = 7)

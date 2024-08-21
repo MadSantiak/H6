@@ -21,6 +21,15 @@ import psycheassistant.composeapp.generated.resources.Res
 import psycheassistant.composeapp.generated.resources.select_date
 import psycheassistant.composeapp.generated.resources.selected_date
 
+/**
+ * Date picker component
+ * Used to display a date-picker alert-type dialogue.
+ * This is instantiated using the library kmp_date_time_picker (WheelDatePickerView),
+ * passing the functions to be used for selecting the chosen date/dismissing the component, as well as the initial date (typically the current date).
+ * @param initialDate
+ * @param onDateSelected
+ * @param onDismiss
+ */
 @Composable
 fun DatePickerComponent(
     initialDate: LocalDate,

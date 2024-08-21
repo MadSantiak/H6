@@ -13,6 +13,15 @@ import psycheassistant.composeapp.generated.resources.Res
 import psycheassistant.composeapp.generated.resources.activity
 import psycheassistant.composeapp.generated.resources.energy
 
+/**
+ * Activity item table
+ * Table stored as an item to be called with a list of activities. This in turn calls items for each individual activity.
+ * This is done for the sake of readability.
+ * @param activities
+ * @param onCompleteClick
+ * @param onDeleteClick
+ * @param modifier
+ */
 @Composable
 fun ActivityItemTable(
     activities: List<Activity>,

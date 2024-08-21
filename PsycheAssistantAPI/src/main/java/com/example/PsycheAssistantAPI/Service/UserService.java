@@ -1,10 +1,15 @@
 package com.example.PsycheAssistantAPI.Service;
 
+import com.example.PsycheAssistantAPI.Model.Activity;
+import com.example.PsycheAssistantAPI.Model.Group;
 import com.example.PsycheAssistantAPI.Model.User;
+import com.example.PsycheAssistantAPI.Repository.ActivityRepository;
+import com.example.PsycheAssistantAPI.Repository.GroupRepository;
 import com.example.PsycheAssistantAPI.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,6 +18,10 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ActivityRepository activityRepository;
+    @Autowired
+    private GroupRepository groupRepository;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -38,6 +47,19 @@ public class UserService {
     }
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Transactional
+    public boolean deleteUser(User user) {
+        activityRepository.updateActivitiesHandledByUser(user);
+        activityRepository.updateActivitiesOwnedByUser(user);
+        Group group = user.getGroup();
+        group.removeUser(user);
+        if (user == group.getOwner()) {
+            group.setOwner(null);
+        }
+        userRepository.delete(user);
+        return true;
     }
 
     private boolean isValidEmail(String email) {

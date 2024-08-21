@@ -19,6 +19,18 @@ import psycheassistant.composeapp.generated.resources.Res
 import psycheassistant.composeapp.generated.resources.kick_member
 import psycheassistant.composeapp.generated.resources.you
 
+/**
+ * User item
+ * Composable used to display single User records, passed along as a parameter
+ * Note it also accepts the function used to kick a user from the group (passed from GroupManagementPage > UserItemTable > UserItem),
+ * as well as a boolean value to indicate whether the user logged in to the app, is the one being iterated upon (isCurrentUser),
+ * to clarify to the user which user they are in the resulting table.
+ * @param user
+ * @param onKickClick Function
+ * @param showKickButton
+ * @param isCurrentUser
+ * @param modifier
+ */
 @Composable
 fun UserItem(
     user: User,
@@ -44,11 +56,7 @@ fun UserItem(
             modifier = Modifier
                 .weight(2f)
         )
-        //Text(
-        //    text = user.energyExpenditure.toString(),
-        //    style =  MaterialTheme.typography.body1.copy(color = textColor),
-        //    modifier = Modifier.weight(1f)
-        //)
+
         EnergyOverviewSection(simple=true, specificUser = user)
         if (showKickButton) {
             IconButton(onClick = { onKickClick(user) }) {

@@ -62,12 +62,10 @@ public class GroupController {
                                            @RequestBody Map<String, String> payload) {
         String code = payload.get("code");
         ResponseEntity<User> userResponse = authHelper.validateAndGetUser(authHeader);
-        if (userResponse.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>(null, userResponse.getStatusCode());
-        }
-
         User user = userResponse.getBody();
-        assert user != null;
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
 
         try {
             Group updatedGroup = groupService.joinGroup(code, user);
@@ -83,13 +81,10 @@ public class GroupController {
                                              @RequestBody Map<String, Integer> payload) {
         Integer userIdToKick = payload.get("userId");
         ResponseEntity<User> userResponse = authHelper.validateAndGetUser(authHeader);
-
-        if (userResponse.getStatusCode() != HttpStatus.OK) {
-            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        User user = userResponse.getBody();
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-
-        User currentUser = userResponse.getBody();
-        assert currentUser != null;
 
         try {
             Group group = groupService.findById(id);
@@ -98,7 +93,7 @@ public class GroupController {
             }
 
             // Check if the current user is the owner of the group
-            if (group.getOwner().getId() != currentUser.getId()) {
+            if (group.getOwner().getId() != user.getId()) {
                 return new ResponseEntity<>("Only the group owner can kick members", HttpStatus.FORBIDDEN);
             }
 
@@ -107,6 +102,45 @@ public class GroupController {
             return new ResponseEntity<>("User kicked successfully", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/{id}/leave")
+    public ResponseEntity<Boolean> leaveGroup(@RequestHeader("Authorization") String authHeader,
+                                              @PathVariable int id) {
+        ResponseEntity<User> userResponse = authHelper.validateAndGetUser(authHeader);
+        User user = userResponse.getBody();
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            Group group = groupService.findById(id);
+            if (group == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            groupService.kickMember(id, user.getId());
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{id}/disband")
+    public ResponseEntity<Boolean> disbandGroup(@RequestHeader("Authorization") String authHeader,
+                                              @PathVariable int id) {
+        ResponseEntity<User> userResponse = authHelper.validateAndGetUser(authHeader);
+        User user = userResponse.getBody();
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        try {
+            groupService.deleteGroup(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

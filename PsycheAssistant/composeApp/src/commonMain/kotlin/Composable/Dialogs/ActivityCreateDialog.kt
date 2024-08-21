@@ -15,6 +15,13 @@ import org.jetbrains.compose.resources.stringResource
 import org.psyche.assistant.Composable.Components.DatePickerComponent
 import psycheassistant.composeapp.generated.resources.*
 
+/**
+ * Activity create dialog
+ * A dialog used for creating new activities, passing the functions needed to submit the new activity/dismiss the dialog
+ * Using coroutine to asynchronously attempt to create the activity using onSubmit, as well as the variables
+ * @param onDismiss
+ * @param onSubmit
+ */
 @Composable
 fun ActivityCreateDialog(
     onDismiss: () -> Unit,
@@ -55,6 +62,7 @@ fun ActivityCreateDialog(
                     .fillMaxWidth()
                     .padding(5.dp)
             ) {
+                // Datepicker component, includes button to activate the component.
                 DatePickerComponent(
                     initialDate = selectedDate,
                     onDateSelected = { date -> selectedDate = date },

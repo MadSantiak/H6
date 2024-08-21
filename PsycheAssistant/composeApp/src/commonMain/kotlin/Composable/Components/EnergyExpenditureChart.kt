@@ -26,23 +26,29 @@ import org.psyche.assistant.Model.Activity.Activity
 import psycheassistant.composeapp.generated.resources.Res
 import psycheassistant.composeapp.generated.resources.weekly_overview
 
+/**
+ * Energy expenditure chart
+ * Component used to visualize a list of activities, sent in data as String/List key-value pairs.
+ * with keys being unique dates, and the lists being activities occuring on that date.
+ *
+ * @param data
+ */
 @Composable
 fun EnergyExpenditureChart(data: Map<String, List<Activity>>) {
     if (data.isEmpty()) {
         return
     }
 
-    val chartHeight = 150.dp
     val textStyle = TextStyle(color = Color.Gray, fontSize = 10.sp)
     val padding = 15.dp
 
-    // Calculate the date range for the last 7 days
+    // Generate a list of dates, starting from today, going X days back, essentially using a for-loop like structure to do so.
     val today = LocalDate.now()
     val dateRange = (0 until 7).map { daysBack ->
         today.minus(DatePeriod(days = daysBack))
     }.reversed().map { it.toString() }
 
-    // Generate the daily expenditure map
+    // Generate the daily expenditure map by associating each date generated earlier, summing the energyCost of the list of activities in the passed data, for that date.
     val dailyExpenditure = dateRange.associateWith { date ->
         data[date]?.sumOf { it.energyCost.toDouble() } ?: 0.0
     }
@@ -54,7 +60,6 @@ fun EnergyExpenditureChart(data: Map<String, List<Activity>>) {
             .padding(bottom = 16.dp)
 
     ) {
-        // Header text
         Text(
             text = stringResource(Res.string.weekly_overview),
             style = MaterialTheme.typography.h4,
@@ -73,8 +78,9 @@ fun EnergyExpenditureChart(data: Map<String, List<Activity>>) {
         ) {
             Canvas(modifier = Modifier.fillMaxSize()) {
                 val width = size.width / 7f // Fixed number of bars (7)
-                val maxEnergy = dailyExpenditure.values.maxOrNull() ?: 1.0 // Avoid division by zero
+                val maxEnergy = dailyExpenditure.values.maxOrNull() ?: 1.0
 
+                // For each date-energyExpenditure pair (toList), we draw a rectangle, using the relative energy per day divided by the absolute max of all dates
                 dailyExpenditure.toList().forEachIndexed { index, (_, energy) ->
                     val barHeight = (energy / maxEnergy) * size.height
 
@@ -89,7 +95,7 @@ fun EnergyExpenditureChart(data: Map<String, List<Activity>>) {
 
         Divider()
 
-        // Dates and Values
+        // Adding a row beneath the Canvas, were we explicitly write out the date and energy expenditure for each bar generated above.
         Row(
             modifier = Modifier
                 .fillMaxWidth()

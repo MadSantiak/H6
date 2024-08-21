@@ -2,11 +2,17 @@
 - - -
 
 > ### Author: Mads Søndergaard 
-> ### Current version: 0.2.0
+> ### Current version: 0.2.1
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.2.1:
+> General
+> - Added the final polish needed for complete CRUD implementation, allowing for deletion/disbanding of users/groups.
+> - A bit more refactoring of views for better UI/UX
+> - Added documentation to code where relevant/appropriate.
+
 ### 0.2.0:
 > General
 > - Moved to major change as the application now fulfills all major primary milestones

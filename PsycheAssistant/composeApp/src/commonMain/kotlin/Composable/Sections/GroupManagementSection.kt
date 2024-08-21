@@ -9,15 +9,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
+import org.psyche.assistant.Composable.Dialogs.ConfirmDeleteDialog
 import org.psyche.assistant.Composable.Items.UserItemTable
-import org.psyche.assistant.Controller.GroupController
 import org.psyche.assistant.Composable.LocalAuthToken
 import org.psyche.assistant.Composable.LocalGroup
 import org.psyche.assistant.Composable.LocalUser
+import org.psyche.assistant.Controller.GroupController
 import org.psyche.assistant.Controller.UserController
 import org.psyche.assistant.Model.User.User
 import psycheassistant.composeapp.generated.resources.*
 
+/**
+ * Group management section
+ * Used for group-specific administrative tasks and overview. I.e. creating or joining a group,
+ * as well as seeing an overview of the groups members, and being able to kick them (if the user is the owner of the group).
+ *
+ */
 @Composable
 fun GroupManagementSection() {
     val coroutineScope = rememberCoroutineScope()
@@ -30,6 +37,7 @@ fun GroupManagementSection() {
     var code by remember { mutableStateOf("")}
     var members by remember { mutableStateOf<List<User>>(emptyList())}
 
+    var showConfirmationDialog by remember { mutableStateOf(false) }
     var isOwner by remember { mutableStateOf(false)}
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
@@ -39,8 +47,9 @@ fun GroupManagementSection() {
     var noCodeOrAuth = stringResource(Res.string.no_code_or_auth)
     var membersAmount = stringResource(Res.string.members_amount, members.size)
 
-    LaunchedEffect(authToken.value, group.value?.id, members) {
-        if (authToken.value != null && group.value != null) {
+
+    LaunchedEffect(authToken, group.value, members) {
+        if (authToken.value != null) {
             isLoading = true
             try {
                 val groupDetails = groupController.getGroupDetails(group.value!!.id)
@@ -75,17 +84,71 @@ fun GroupManagementSection() {
         }
     }
 
+    val disbandGroup = {
+        coroutineScope.launch {
+            try {
+                isLoading = true
+                val result = groupController.disbandGroup(authToken.value!!, group.value!!.id)
+                if (result) {
+                    group.value = null
+                    members = emptyList()
+                } else {
+                    errorMessage = "Failed to disband group."
+                }
+            } catch (e: Exception) {
+                errorMessage = e.message ?: unknownError
+            } finally {
+                isLoading = false
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
         .fillMaxWidth()
         .padding(8.dp)
     ) {
-        // TO-DO: Remove, only here for testing purposes.
-        if (isOwner) {
-            Text("Owner!")
-        }
         Text(stringResource(Res.string.group, group.value?.code ?: stringResource(Res.string.no_group)), style = MaterialTheme.typography.h6)
         Spacer(modifier = Modifier.height(16.dp))
+
+        if (authToken.value != null && group.value != null) {
+
+            Row {
+                Button(onClick = {
+                    coroutineScope.launch {
+                        try {
+                            isLoading = true
+                            val result = groupController.leaveGroup(authToken.value!!, group.value!!.id)
+                            if (result) {
+                                group.value = null
+                                members = emptyList()
+                            } else {
+                                errorMessage = "Testing.."
+                            }
+                        } catch (e: Exception) {
+                            errorMessage = e.message ?: unknownError
+                        } finally {
+                            isLoading = false
+                        }
+                    }
+                }) {
+                    Text(text = stringResource(Res.string.leave_group))
+                }
+                Spacer(modifier = Modifier.padding(15.dp))
+                if (isOwner) {
+                    Button(
+                        onClick = {
+                            showConfirmationDialog = true
+                        }, colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color.Red,
+                            contentColor = Color.Black
+                        )
+                    ) {
+                        Text(text = stringResource(Res.string.disband_group))
+                    }
+                }
+            }
+        }
 
         if (authToken.value != null && group.value == null) {
             Button(onClick = {
@@ -170,6 +233,16 @@ fun GroupManagementSection() {
             Text(text = errorMessage, color = Color.Red)
         }
 
+        if (showConfirmationDialog) {
+            ConfirmDeleteDialog(
+                title = stringResource(Res.string.confirm_disband),
+                message = stringResource(Res.string.disband_confirm_intent),
+                confirmButtonText = stringResource(Res.string.disband),
+                dismissButtonText = stringResource(Res.string.cancel),
+                onConfirm = { disbandGroup() },
+                onDismiss = { showConfirmationDialog = false }
+            )
+        }
 
     }
 }

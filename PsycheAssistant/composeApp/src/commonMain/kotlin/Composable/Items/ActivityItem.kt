@@ -22,6 +22,14 @@ import psycheassistant.composeapp.generated.resources.Res
 import psycheassistant.composeapp.generated.resources.complete
 import psycheassistant.composeapp.generated.resources.delete
 
+/**
+ * Activity item
+ * Composable used to display a single Activity record, passed to it as a parameter.
+ * Note this exists as part of a table structure, and is therefore arranged in rows.
+ * @param activity
+ * @param onCompleteClick
+ * @param onDeleteClick
+ */
 @Composable
 fun ActivityItem(
     activity: Activity,
@@ -29,10 +37,12 @@ fun ActivityItem(
     onDeleteClick: (Activity) -> Unit,
     ) {
 
+    val isCompleted = activity.completed
+
     Row(
         modifier = Modifier
             .padding(vertical = 8.dp)
-            // if the activity is completed, append a second modifier in order to strike through the entire row.
+            // Append a second modifier in order to strike through the entire row, if the activity is completed.
             .then(
                 if (activity.completed) Modifier.drawBehind {
                     val strokeWidth = 2.dp.toPx()
@@ -62,7 +72,14 @@ fun ActivityItem(
             modifier = Modifier
                 .weight(1f)
         )
-        IconButton(onClick = { onCompleteClick(activity) }) {
+        IconButton(
+            onClick = {
+                if (!isCompleted) {
+                    onCompleteClick(activity)
+                }
+            },
+            enabled = !isCompleted
+        ) {
             Icon(Icons.Filled.Check, contentDescription = stringResource(Res.string.complete))
         }
         IconButton(onClick = { onDeleteClick(activity) }) {

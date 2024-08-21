@@ -83,7 +83,12 @@ public class ActivityController {
     }
 
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<Boolean> deleteActivity(@PathVariable int id) {
+    public ResponseEntity<Boolean> deleteActivity(@RequestHeader("Authorization") String authHeader, @PathVariable int id) {
+        ResponseEntity<User> userResponse = authHelper.validateAndGetUser(authHeader);
+        User user = userResponse.getBody();
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         boolean success = activityService.deleteActivity(id);
         return success ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -96,6 +101,7 @@ public class ActivityController {
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 
+
     @GetMapping("/group/{groupId}/period")
     public ResponseEntity<List<Activity>> getPeriodActivitiesWithDeadline(
             @PathVariable int groupId,
@@ -103,6 +109,15 @@ public class ActivityController {
             @RequestParam("endDate") String endDate) {
 
         List<Activity> activities = activityService.getByPeriod(groupId, startDate, endDate);
+        return new ResponseEntity<>(activities, HttpStatus.OK);
+    }
+    @GetMapping("/group/{groupId}/handled/period")
+    public ResponseEntity<List<Activity>> getPeriodActivitiesWithHandled(
+            @PathVariable int groupId,
+            @RequestParam("startDate") String startDate,
+            @RequestParam("endDate") String endDate) {
+
+        List<Activity> activities = activityService.getHandledByPeriod(groupId, startDate, endDate);
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 
