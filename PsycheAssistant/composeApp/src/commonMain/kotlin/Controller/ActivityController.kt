@@ -7,6 +7,10 @@ import org.psyche.assistant.Service.ActivityService
 class ActivityController {
     private val activityService = ActivityService()
 
+    suspend fun getHandledActivityByPeriod(groupId: Int, startDate: LocalDate, endDate: LocalDate): List<Activity> {
+        return activityService.getHandledActivityByPeriod(groupId, startDate, endDate)
+    }
+
     suspend fun getActivityByPeriod(groupId: Int, startDate: LocalDate, endDate: LocalDate): List<Activity> {
         return activityService.getActivityByPeriod(groupId, startDate, endDate)
     }
@@ -23,8 +27,8 @@ class ActivityController {
         return activityService.completeActivity(authToken, activityId)
     }
 
-    suspend fun deleteActivity(activityId: Int): Boolean {
-        return activityService.deleteActivity(activityId)
+    suspend fun deleteActivity(authToken: String, activityId: Int): Boolean {
+        return activityService.deleteActivity(authToken, activityId)
     }
 
 }

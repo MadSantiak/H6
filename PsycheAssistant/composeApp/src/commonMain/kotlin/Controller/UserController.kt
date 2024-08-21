@@ -22,6 +22,10 @@ class UserController {
         userService.logoutUser()
     }
 
+    suspend fun deleteUser(authToken: String): Boolean {
+        return userService.deleteUser(authToken)
+    }
+
     suspend fun getUserById(id: Int): User? {
         return userService.getUserById(id)
     }

@@ -8,13 +8,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
-import org.psyche.assistant.Controller.UserController
+import org.psyche.assistant.Composable.Dialogs.ConfirmDeleteDialog
 import org.psyche.assistant.Composable.LocalAuthToken
 import org.psyche.assistant.Composable.LocalGroup
 import org.psyche.assistant.Composable.LocalUser
+import org.psyche.assistant.Controller.UserController
 import psycheassistant.composeapp.generated.resources.*
 
-
+/**
+ * User management section
+ * Used to manage user-specific settings. I.e. registering and/or logging in/out of a specific user.
+ */
 @Composable
 fun UserManagementSection() {
     val coroutineScope = rememberCoroutineScope()
@@ -30,38 +34,64 @@ fun UserManagementSection() {
 
     var unknownError = stringResource(Res.string.unknown_error)
     var noEmailOrPass = stringResource(Res.string.no_email_or_pass)
+    var showConfirmationDialog by remember { mutableStateOf(false) }
+
+    val deleteUser = {
+        isLoading = true
+        coroutineScope.launch {
+            try {
+                userController.deleteUser(authToken.value!!)
+                authToken.value = null
+                user.value = null
+                group.value = null
+            } catch (e: Exception) {
+                errorMessage = e.message ?: unknownError
+            } finally {
+                isLoading = false
+            }
+        }
+    }
 
     Column(
-        //modifier = Modifier.fillMaxSize(),
-        //horizontalAlignment = Alignment.CenterHorizontally,
-        //verticalArrangement = Arrangement.Center
         modifier = Modifier
         .fillMaxWidth()
         .padding(8.dp)
     ) {
         if (authToken.value != null) {
-            //Text(authToken.value.toString())
             Text(
                 text = stringResource(Res.string.logged_in_as, user.value?.email ?: ""),
                 style = MaterialTheme.typography.h6)
             Spacer(modifier = Modifier.height(16.dp))
 
-            Button(onClick = {
-                isLoading = true
-                coroutineScope.launch {
-                    try {
-                        userController.signOutUser()
-                        authToken.value = null
-                        user.value = null
-                        group.value = null
-                    } catch (e: Exception) {
-                        errorMessage = e.message ?: unknownError
-                    } finally {
-                        isLoading = false
+            Row {
+                Button(onClick = {
+                    isLoading = true
+                    coroutineScope.launch {
+                        try {
+                            userController.signOutUser()
+                            authToken.value = null
+                            user.value = null
+                            group.value = null
+                        } catch (e: Exception) {
+                            errorMessage = e.message ?: unknownError
+                        } finally {
+                            isLoading = false
+                        }
                     }
+                }) {
+                    Text(stringResource(Res.string.logout))
                 }
-            }) {
-                Text(stringResource(Res.string.logout))
+                Spacer(modifier = Modifier.padding(15.dp))
+                Button(
+                    onClick = {
+                        showConfirmationDialog = true
+                    }, colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color.Red,
+                        contentColor = Color.Black
+                    )
+                ) {
+                    Text(stringResource(Res.string.delete_user))
+                }
             }
         } else {
             OutlinedTextField(
@@ -133,5 +163,16 @@ fun UserManagementSection() {
         if (errorMessage.isNotEmpty()) {
             Text(text = errorMessage, color = Color.Red)
         }
+    }
+
+    if (showConfirmationDialog) {
+        ConfirmDeleteDialog(
+            title = stringResource(Res.string.confirm_delete),
+            message = stringResource(Res.string.delete_confirm_intent),
+            confirmButtonText = stringResource(Res.string.delete),
+            dismissButtonText = stringResource(Res.string.cancel),
+            onConfirm = { deleteUser() },
+            onDismiss = { showConfirmationDialog = false }
+        )
     }
 }

@@ -56,6 +56,8 @@
     <string name="kick_member">Fjern medlem</string>
     <string name="create_group">Opret gruppe</string>
     <string name="join_group">Deltag i gruppe</string>
+    <string name="leave_group">Forlad gruppe</string>
+    <string name="disband_group">Opløs gruppe</string>
     <string name="group_code">Gruppe kode</string>
     <string name="no_code_or_auth">Gruppe koden må ikke være tom, eller du er ikke logget ind</string>
     <string name="no_members">Der blev ikke fundet nogen medlemmer..</string>
@@ -63,6 +65,7 @@
     <string name="login">Log ind</string>
     <string name="register">Registrer</string>
     <string name="logout">Log ud</string>
+    <string name="delete_user">Slet bruger</string>
     <string name="member">Medlem</string>
     <string name="member_label">Medlem: %1$s</string>
     <string name="members_amount">Antal medlemmer: %1$s</string>
@@ -70,11 +73,18 @@
     <string name="day_and_week">dag/uge</string>
     <string name="energy_expenditure_label">Energiforbrug: %1$d</string>
     <string name="you">Dig</string>
+    <string name="confirm_delete">Bekræft sletning</string>
+    <string name="delete_confirm_intent">Er du sikker på, du ønsker at slette din bruger? Dette kan ikke omgøres.</string>
+    <string name="confirm_disband">Bekræft opløsning</string>
+    <string name="disband_confirm_intent">Er du sikker på, du ønsker at opløse din gruppe? Dette kan ikke omgøres.</string>
+    <string name="disband">Opløs</string>
 
     <!-- Activities -->
     <string name="activities">Aktiviteter</string>
     <string name="activity">Aktivitet</string>
     <string name="create_activity">Opret aktivitet</string>
+    <string name="failed_create_activity">Kunne ikke slette aktivitet</string>
+    <string name="failed_complete_activity">Kunne ikke fuldføre aktivitet</string>
     <string name="complete">Fuldfør</string>
     <string name="select_date">Vælg dato</string>
     <string name="selected_date">Dato: %1$s</string>

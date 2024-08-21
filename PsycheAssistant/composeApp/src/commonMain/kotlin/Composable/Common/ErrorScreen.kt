@@ -7,6 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
+/**
+ * (DEPRECATED!) Error screen
+ * Common composable to show full-screen error message (taken as a parameter).
+ * As of writing not used.
+ * @param message
+ */
 @Composable
 fun ErrorScreen(message: String) {
     Box(

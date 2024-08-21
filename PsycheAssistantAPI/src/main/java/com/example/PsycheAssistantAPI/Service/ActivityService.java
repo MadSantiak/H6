@@ -50,14 +50,16 @@ public class ActivityService {
 
     public Activity completeActivity(User user, int activityId) {
         Activity activity = findById(activityId);
-        if (activity != null) {
-            activity.setCompleted(true);
-            activity.setHandledBy(user);
-            activity.setHandledOn(LocalDate.now());
-            activityRepository.save(activity);
-            return activity;
+        if (activity.isCompleted()) {
+            throw new IllegalStateException("Activity is already completed");
         }
-        return null;
+
+        activity.setCompleted(true);
+        activity.setHandledBy(user);
+        activity.setHandledOn(LocalDate.now());
+        activityRepository.save(activity);
+        return activity;
+
     }
 
     public boolean deleteActivity(int activityId) {
@@ -78,5 +80,11 @@ public class ActivityService {
         LocalDate dateStart = LocalDate.parse(startDate);
         LocalDate dateEnd = LocalDate.parse(endDate);
         return activityRepository.findActivitiesForPeriod(groupId, dateStart, dateEnd);
+    }
+
+    public List<Activity> getHandledByPeriod(int groupId, String startDate, String endDate) {
+        LocalDate dateStart = LocalDate.parse(startDate);
+        LocalDate dateEnd = LocalDate.parse(endDate);
+        return activityRepository.findHandledActivitiesForPeriod(groupId, dateStart, dateEnd);
     }
 }

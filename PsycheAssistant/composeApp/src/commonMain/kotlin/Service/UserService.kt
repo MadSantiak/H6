@@ -12,6 +12,12 @@ import org.psyche.assistant.Storage.AuthStorage
 class UserService : UserRepository {
     private val client = HttpClient()
 
+    /**
+     * Get user details
+     * Fetches the users details, as well as revalidating or refreshing tokens.
+     * @param authToken
+     * @return
+     */
     override suspend fun getUserDetails(authToken: String): User? {
         val url = ServiceBuilder.url("api/users/me")
         var response: HttpResponse = client.get(url) {
@@ -42,7 +48,11 @@ class UserService : UserRepository {
     }
 
     /**
+     * Register user
      * Register the user using the supplied credentials. Verify that email and password live up to security standards, before posting to server.
+     * @param email
+     * @param password
+     * @return
      */
     override suspend fun registerUser(email: String, password: String): String {
         validateEmail(email)
@@ -59,8 +69,15 @@ class UserService : UserRepository {
         }
     }
 
+    /**
+     * Login user
+     * Logs in the user based on supplied credentials, and saves JWT access/refresh tokens.
+     * @param email
+     * @param password
+     * @return
+     */
     override suspend fun loginUser(email: String, password: String): String {
-        val url = ServiceBuilder.url("api/auth/login")
+        val url = ServiceBuilder.url("api/users/login")
         val response: HttpResponse = client.post(url) {
             contentType(ContentType.Application.FormUrlEncoded)
             setBody("email=$email&password=$password")
@@ -83,10 +100,37 @@ class UserService : UserRepository {
         }
     }
 
+    /**
+     * Logout user
+     * Logs out the user by rescinding identification tokens, meaning the user now must log back in to access external data.
+     */
     override suspend fun logoutUser() {
         AuthStorage.removeAuthToken()
         AuthStorage.removeRefreshToken()
     }
+
+    /**
+     * Delete user
+     * Removes the user from the database.
+     * @param authToken
+     * @return
+     */
+    override suspend fun deleteUser(authToken: String): Boolean {
+        val url = ServiceBuilder.url("api/users/delete")
+        val response: HttpResponse = client.delete(url) {
+            contentType(ContentType.Application.Json)
+            header(HttpHeaders.Authorization, "Bearer $authToken")
+        }
+
+        return when (response.status) {
+            HttpStatusCode.OK -> {
+                val responseBody = response.bodyAsText()
+                Json.decodeFromString<Boolean>(responseBody)
+            }
+            else -> false
+        }
+    }
+
 
     override suspend fun getUserById(id: Int): User? {
         val url = ServiceBuilder.url("api/users/$id")
@@ -102,16 +146,21 @@ class UserService : UserRepository {
         }
     }
 
+    /**
+     * Refresh token
+     * Requests a refresh token from the API.
+     * @return
+     */
     private suspend fun refreshToken(): String? {
         val refreshToken = AuthStorage.getRefreshToken() ?: return null
 
-        val url = ServiceBuilder.url("api/auth/refresh-token")
+        val url = ServiceBuilder.url("api/users/refresh-token")
         val response: HttpResponse = client.post(url) {
             header(HttpHeaders.Authorization, "Bearer $refreshToken")
         }
 
         return if (response.status == HttpStatusCode.OK) {
-            val newAccessToken = response.bodyAsText() // Assuming the server returns a new access token
+            val newAccessToken = response.bodyAsText()
             newAccessToken
         } else {
             // Handle refresh token failure
@@ -121,6 +170,11 @@ class UserService : UserRepository {
         }
     }
 
+    /**
+     * Validate email
+     * Helper function to validate email format when necessary.
+     * @param email
+     */
     private fun validateEmail(email: String) {
         val emailRegex = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
         if (!email.matches(emailRegex.toRegex())) {
@@ -128,6 +182,11 @@ class UserService : UserRepository {
         }
     }
 
+    /**
+     * Validate password
+     * Helper function to validate password lives up to certain requirements.
+     * @param password
+     */
     private fun validatePassword(password: String) {
         if (password.length < 8 ||
             !password.any { it.isUpperCase() } ||

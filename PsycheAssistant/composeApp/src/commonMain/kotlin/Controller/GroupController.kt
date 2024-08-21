@@ -1,7 +1,6 @@
 package org.psyche.assistant.Controller
 
 import org.psyche.assistant.Model.Group.Group
-import org.psyche.assistant.Model.User.User
 import org.psyche.assistant.Service.GroupService
 
 class GroupController {
@@ -23,4 +22,11 @@ class GroupController {
         return groupService.removeUserFromGroup(authToken, groupId, userId)
     }
 
+    suspend fun leaveGroup(authToken: String, groupId: Int): Boolean {
+        return groupService.leaveGroup(authToken, groupId)
+    }
+
+    suspend fun disbandGroup(authToken: String, groupId: Int): Boolean {
+        return groupService.disbandGroup(authToken, groupId)
+    }
 }
