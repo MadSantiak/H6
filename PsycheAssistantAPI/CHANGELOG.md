@@ -2,17 +2,20 @@
 - - - 
 
 > ### Author: Mads Søndergaard
-> ### Current version: 0.1.0
+> ### Current version: 0.1.1
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.1.1:
+> General
+> - Migrated external database to PostgreSQL.
+
 ### 0.1.0:
 > General
 > - Updated version to major version number to reflect CRUD completeness.
 > - Added logic for deleting a user, ensuring when doing so that related activities are updated accordingly.
 > - Refined logic for deleting (disbanding) groups, as well as transactions to ensure related models are updated aswell.
-
 
 ### 0.0.7:
 > General

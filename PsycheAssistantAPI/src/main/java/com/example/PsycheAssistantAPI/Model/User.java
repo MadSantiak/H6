@@ -34,6 +34,5 @@ public class User {
     @JoinColumn(name = "group_id")
     @JsonIdentityReference(alwaysAsId = true)
     private Group group = null;
-
-
 }
+
