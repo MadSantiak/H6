@@ -2,11 +2,17 @@
 - - - 
 
 > ### Author: Mads Søndergaard
-> ### Current version: 0.1.1
+> ### Current version: 0.1.2
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.1.2:
+> General
+> - Moved sensitive information to properties files.
+> - Added certification so communication between front- and back-end must use HTTPS, as passwords were sent in clear-text.
+>   - NOTE: Be aware of this during presentation, as the server is hosted locally, and thus sensitive to network changes.
+
 ### 0.1.1:
 > General
 > - Migrated external database to PostgreSQL.

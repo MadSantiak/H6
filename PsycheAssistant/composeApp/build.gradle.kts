@@ -70,6 +70,8 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.sqldelight.android)
+            implementation("io.ktor:ktor-client-okhttp:2.3.3")
+            implementation("com.squareup.okhttp3:okhttp:4.10.0")
         }
 
 

@@ -2,11 +2,17 @@
 - - -
 
 > ### Author: Mads Søndergaard 
-> ### Current version: 0.2.1
+> ### Current version: 0.2.2
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.2.2:
+> General
+> - Moved sensitive information to separate properties files.
+> - Enabled certification for HTTPS; included in GitHub commit for the sake of example, as they are simple self-signed certs.
+> - Added helper method for fetching properties on specific platforms.
+
 ### 0.2.1:
 > General
 > - Added the final polish needed for complete CRUD implementation, allowing for deletion/disbanding of users/groups.
