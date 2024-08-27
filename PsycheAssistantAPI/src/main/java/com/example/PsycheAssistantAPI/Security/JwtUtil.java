@@ -25,9 +25,6 @@ public class JwtUtil {
 
     @Value("${jwt.refresh-token-expiration}")
     private long REFRESH_TOKEN_EXPIRATION;
-    //private final String SECRET_KEY = "TestKey";
-    //private final long JWT_EXPIRATION = 1000 * 60 * 60 * 10; // 10 hours
-    //private final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24 * 7; // 7 days
 
     @Autowired
     private UserDetailsService userDetailsService;
