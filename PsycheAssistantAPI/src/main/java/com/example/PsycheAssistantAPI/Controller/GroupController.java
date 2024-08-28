@@ -102,7 +102,7 @@ public class GroupController {
      * @return
      */
     @PostMapping("/{id}/kick")
-    public ResponseEntity<String> kickMember(@RequestHeader("Authorization") String authHeader,
+    public ResponseEntity<Group> kickMember(@RequestHeader("Authorization") String authHeader,
                                              @PathVariable int id,
                                              @RequestBody Map<String, Integer> payload) {
         Integer userIdToKick = payload.get("userId");
@@ -115,19 +115,17 @@ public class GroupController {
         try {
             Group group = groupService.findById(id);
             if (group == null) {
-                return new ResponseEntity<>("Group not found", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-            // Check if the current user is the owner of the group
             if (group.getOwner().getId() != user.getId()) {
-                return new ResponseEntity<>("Only the group owner can kick members", HttpStatus.FORBIDDEN);
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
 
-            // Proceed with kicking the member
             Group updatedGroup = groupService.kickMember(id, userIdToKick);
-            return new ResponseEntity<>("User kicked successfully", HttpStatus.OK);
+            return new ResponseEntity<>(updatedGroup, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
