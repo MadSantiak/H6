@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller for API; exposes back-ends for front- to back-end communication used for manipulating Group model data.
+ */
 @RestController
 @RequestMapping("/api/groups")
 public class GroupController {
@@ -35,6 +38,11 @@ public class GroupController {
         return groupService.findById(id);
     }
 
+    /**
+     * Gets all users belonging to the group.
+     * @param id
+     * @return
+     */
     @GetMapping("/{id}/users")
     public List<User> getUsersInGroup(@PathVariable int id) {
         Group group = groupService.findById(id);
@@ -44,6 +52,11 @@ public class GroupController {
         return group.getUsers();
     }
 
+    /**
+     * Creates a new group.
+     * @param authHeader
+     * @return
+     */
     @PostMapping("/register")
     public ResponseEntity<Group> createGroup(@RequestHeader("Authorization") String authHeader) {
         ResponseEntity<User> userResponse = authHelper.validateAndGetUser(authHeader);
@@ -57,6 +70,12 @@ public class GroupController {
         return new ResponseEntity<>(newGroup, HttpStatus.CREATED);
     }
 
+    /**
+     * Joins the validated user to the group matching the supplied code.
+     * @param authHeader
+     * @param payload
+     * @return
+     */
     @PostMapping("/join")
     public ResponseEntity<Group> joinGroup(@RequestHeader("Authorization") String authHeader,
                                            @RequestBody Map<String, String> payload) {
@@ -75,6 +94,13 @@ public class GroupController {
         }
     }
 
+    /**
+     * Removes the identified user (via id), if the kicking user is valid and owner.
+     * @param authHeader
+     * @param id
+     * @param payload
+     * @return
+     */
     @PostMapping("/{id}/kick")
     public ResponseEntity<String> kickMember(@RequestHeader("Authorization") String authHeader,
                                              @PathVariable int id,
@@ -105,6 +131,12 @@ public class GroupController {
         }
     }
 
+    /**
+     * Removes the requesting user from the group.
+     * @param authHeader
+     * @param id
+     * @return
+     */
     @PostMapping("/{id}/leave")
     public ResponseEntity<Boolean> leaveGroup(@RequestHeader("Authorization") String authHeader,
                                               @PathVariable int id) {
@@ -127,6 +159,12 @@ public class GroupController {
         }
     }
 
+    /**
+     * Deletes the group from the database
+     * @param authHeader
+     * @param id
+     * @return
+     */
     @DeleteMapping("/{id}/disband")
     public ResponseEntity<Boolean> disbandGroup(@RequestHeader("Authorization") String authHeader,
                                               @PathVariable int id) {

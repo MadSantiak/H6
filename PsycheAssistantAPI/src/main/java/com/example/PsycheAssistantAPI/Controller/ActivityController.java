@@ -17,6 +17,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller for API; exposes back-ends for front- to back-end communication used for manipulating Activity model data.
+ */
 @RestController
 @RequestMapping("/api/activities")
 public class ActivityController {
@@ -39,6 +42,12 @@ public class ActivityController {
         return activityService.findById(id);
     }
 
+    /**
+     * Validates user and creates an activity based on the payload contents received.
+     * @param authHeader
+     * @param payload
+     * @return
+     */
     @PostMapping("/create")
     public ResponseEntity<Activity> createActivity(
             @RequestHeader("Authorization") String authHeader,
@@ -65,6 +74,12 @@ public class ActivityController {
         }
     }
 
+    /**
+     * Validates the user and sets the activity to completed by that user
+     * @param authHeader
+     * @param id
+     * @return
+     */
     @PostMapping("/{id}/complete")
     public ResponseEntity<Activity> completeActivity(@RequestHeader("Authorization") String authHeader, @PathVariable int id) {
         ResponseEntity<User> userResponse = authHelper.validateAndGetUser(authHeader);
@@ -82,6 +97,12 @@ public class ActivityController {
 
     }
 
+    /**
+     * Deletes an activity from the database
+     * @param authHeader
+     * @param id
+     * @return
+     */
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<Boolean> deleteActivity(@RequestHeader("Authorization") String authHeader, @PathVariable int id) {
         ResponseEntity<User> userResponse = authHelper.validateAndGetUser(authHeader);
@@ -93,6 +114,12 @@ public class ActivityController {
         return success ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Gets a range of activities for a group, based on the specific date they were created.
+     * @param groupId
+     * @param date
+     * @return
+     */
     @GetMapping("/group/{groupId}")
     public ResponseEntity<List<Activity>> getActivitiesForGroupWithDeadline(
             @PathVariable int groupId,
@@ -101,7 +128,13 @@ public class ActivityController {
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
 
-
+    /**
+     * Gets a range of activities where their deadline (creation date) is within a given period.
+     * @param groupId
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     @GetMapping("/group/{groupId}/period")
     public ResponseEntity<List<Activity>> getPeriodActivitiesWithDeadline(
             @PathVariable int groupId,
@@ -111,6 +144,14 @@ public class ActivityController {
         List<Activity> activities = activityService.getByPeriod(groupId, startDate, endDate);
         return new ResponseEntity<>(activities, HttpStatus.OK);
     }
+
+    /**
+     * Gets a range of activities where their handledOn date is within a given period.
+     * @param groupId
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     @GetMapping("/group/{groupId}/handled/period")
     public ResponseEntity<List<Activity>> getPeriodActivitiesWithHandled(
             @PathVariable int groupId,

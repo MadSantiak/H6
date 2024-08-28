@@ -12,6 +12,10 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
 
+/**
+ * Configures security, i.e. which endpoints can be accessed without authentication.
+ * For development purposes, all are currently permitted.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {

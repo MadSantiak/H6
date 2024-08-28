@@ -20,6 +20,14 @@ public class JwtFilter extends GenericFilterBean {
         this.jwtUtil = jwtUtil;
     }
 
+    /**
+     * Override of standard filter function, in order for us to filter based on email and not username.
+     * @param request
+     * @param response
+     * @param chain
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -51,7 +59,6 @@ public class JwtFilter extends GenericFilterBean {
                     return;
                 }
             } catch (Exception e) {
-                // Handle other exceptions
                 httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token.");
                 return;
             }

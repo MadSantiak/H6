@@ -7,7 +7,6 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
 object ServiceBuilder {
-    // Moved url to separate file, albeit it not necessitates platform specific retrieval.
     private val BASE_URL = ConfigProvider.baseUrl
 
     val client = HttpClient(CIO) {
