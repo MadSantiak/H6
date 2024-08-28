@@ -81,7 +81,7 @@ fun ActivityCreateDialog(
                     value = energyCost,
                     onValueChange = { energyCost = it },
                     valueRange = 0f..10f,
-                    steps = 10
+                    steps = 9
                 )
                 Text(stringResource(Res.string.energy_cost, energyCost.toInt()))
 

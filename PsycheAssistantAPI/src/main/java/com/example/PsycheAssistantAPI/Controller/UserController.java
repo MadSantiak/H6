@@ -130,7 +130,7 @@ public class UserController {
      * @return
      */
     @DeleteMapping("/delete")
-    public ResponseEntity<Boolean> deleteActivity(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<Boolean> deleteUser(@RequestHeader("Authorization") String authHeader) {
         try {
             String token = authHeader.replace("Bearer ", "");
             String email = jwtUtil.extractEmail(token);
