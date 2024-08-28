@@ -2,17 +2,26 @@
 - - - 
 
 > ### Author: Mads Søndergaard
-> ### Current version: 0.1.0
+> ### Current version: 0.1.2
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.1.2:
+> General
+> - Moved sensitive information to properties files.
+> - Added certification so communication between front- and back-end must use HTTPS, as passwords were sent in clear-text.
+>   - NOTE: Be aware of this during presentation, as the server is hosted locally, and thus sensitive to network changes.
+
+### 0.1.1:
+> General
+> - Migrated external database to PostgreSQL.
+
 ### 0.1.0:
 > General
 > - Updated version to major version number to reflect CRUD completeness.
 > - Added logic for deleting a user, ensuring when doing so that related activities are updated accordingly.
 > - Refined logic for deleting (disbanding) groups, as well as transactions to ensure related models are updated aswell.
-
 
 ### 0.0.7:
 > General

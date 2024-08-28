@@ -12,6 +12,10 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
 
+/**
+ * Configures security, i.e. which endpoints can be accessed without authentication.
+ * For development purposes, all are currently permitted.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -22,13 +26,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF protection
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                //.requestMatchers("/api/auth/**").permitAll()  // Allow access to auth endpoints
-                                .requestMatchers("/**").permitAll()  // Allow access to ALL endpoints (for development)
+                                .requestMatchers("/**").permitAll()
                                 .requestMatchers("/console/h2").permitAll()
-                                .anyRequest().authenticated()  // Require authentication for all other requests
+                                .anyRequest().authenticated()
                 )
                 .headers(headers -> headers
                         .frameOptions().sameOrigin())

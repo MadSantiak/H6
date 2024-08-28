@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,13 +17,26 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "TestKey";
-    private final long JWT_EXPIRATION = 1000 * 60 * 60 * 10; // 10 hours
-    private final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24 * 7; // 7 days
+    /**
+     * Fetch relevant keys/configurations from application.properties (actually imported from credentials.properties)
+     */
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
+
+    @Value("${jwt.expiration}")
+    private long JWT_EXPIRATION;
+
+    @Value("${jwt.refresh-token-expiration}")
+    private long REFRESH_TOKEN_EXPIRATION;
 
     @Autowired
     private UserDetailsService userDetailsService;
 
+    /**
+     * Generates a new token.
+     * @param email
+     * @return
+     */
     public String generateToken(String email) {
         try {
             return Jwts.builder()
@@ -37,6 +51,11 @@ public class JwtUtil {
         }
     }
 
+    /**
+     * Extracts the email (subject) of the token.
+     * @param token
+     * @return
+     */
     public String extractEmail(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET_KEY)
@@ -45,11 +64,22 @@ public class JwtUtil {
                 .getSubject();
     }
 
+    /**
+     * Validates the token supplied matches the passed email.
+     * @param token
+     * @param email
+     * @return
+     */
     public boolean validateToken(String token, String email) {
         String extractedEmail = extractEmail(token);
         return (extractedEmail.equals(email));
     }
 
+    /**
+     * Checks if token is expired.
+     * @param token
+     * @return
+     */
     private boolean isTokenExpired(String token) {
         Date expiration = Jwts.parser()
                 .setSigningKey(SECRET_KEY)
@@ -59,6 +89,11 @@ public class JwtUtil {
         return expiration.before(new Date());
     }
 
+    /**
+     * Generates refresh-token.
+     * @param email
+     * @return
+     */
     public String generateRefreshToken(String email) {
         try {
             return Jwts.builder()
@@ -72,7 +107,12 @@ public class JwtUtil {
         }
     }
 
-
+    /**
+     * Validates refresh-token based on passed email.
+     * @param refreshToken
+     * @param email
+     * @return
+     */
     public boolean validateRefreshToken(String refreshToken, String email) {
         try {
             String tokenEmail = extractEmail(refreshToken);
@@ -82,6 +122,11 @@ public class JwtUtil {
         }
     }
 
+    /**
+     * Sets authentication for the username (email).
+     * @param username
+     * @param request
+     */
     public void setAuthentication(String username, HttpServletRequest request) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         UsernamePasswordAuthenticationToken authentication =

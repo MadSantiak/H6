@@ -14,6 +14,10 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+
+/**
+ * Links Controller (end-points) to Repository (database)
+ */
 @Service
 public class ActivityService {
 
@@ -34,6 +38,14 @@ public class ActivityService {
         return activityRepository.findById(id).orElse(null);
     }
 
+    /**
+     * Creates a new activity in the database, and updates the groups list of activities.
+     * @param user
+     * @param deadline
+     * @param description
+     * @param energyCost
+     * @return
+     */
     public Activity createActivity(User user, String deadline, String description, int energyCost) {
         Group targetGroup = groupRepository.findById(user.getGroup().getId()).orElseThrow(() -> new IllegalArgumentException("Group not found"));
 
@@ -48,6 +60,12 @@ public class ActivityService {
         return newActivity;
     }
 
+    /**
+     * Validates a given activity isn't already completed, before marking it as complete din the database, using the relevant user to mark who handled it.
+     * @param user
+     * @param activityId
+     * @return
+     */
     public Activity completeActivity(User user, int activityId) {
         Activity activity = findById(activityId);
         if (activity.isCompleted()) {
@@ -62,6 +80,11 @@ public class ActivityService {
 
     }
 
+    /**
+     * Deletes an activity if it exists.
+     * @param activityId
+     * @return
+     */
     public boolean deleteActivity(int activityId) {
         Activity activity = findById(activityId);
         if (activity != null) {
@@ -71,17 +94,37 @@ public class ActivityService {
         return false;
     }
 
+    /**
+     * Fetches activities with deadlines of a specific date.
+     * @param groupId
+     * @param date
+     * @return
+     */
     public List<Activity> getActivitiesForGroupWithDeadline(int groupId, String date) {
         LocalDate dateBoundary = LocalDate.parse(date);
         return activityRepository.findActivitiesForGroupWithDeadline(groupId, dateBoundary);
     }
 
+    /**
+     * Fetches activities based on their deadline, if it is between two specific dates.
+     * @param groupId
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     public List<Activity> getByPeriod(int groupId, String startDate, String endDate) {
         LocalDate dateStart = LocalDate.parse(startDate);
         LocalDate dateEnd = LocalDate.parse(endDate);
         return activityRepository.findActivitiesForPeriod(groupId, dateStart, dateEnd);
     }
 
+    /**
+     * Fetches activities based on their handledOn date, if it is between two specific dates.
+     * @param groupId
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     public List<Activity> getHandledByPeriod(int groupId, String startDate, String endDate) {
         LocalDate dateStart = LocalDate.parse(startDate);
         LocalDate dateEnd = LocalDate.parse(endDate);

@@ -13,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Links Controller (end-points) to Repository (database)
+ */
 @Service
 public class GroupService {
 
@@ -31,6 +34,11 @@ public class GroupService {
         return groupRepository.findByCode(code);
     }
 
+    /**
+     * Verifies the user exists, before creating a new group, generating its join-code (code), setting the owner, and saving it in the database.
+     * @param userId
+     * @return
+     */
     public Group createGroup(int userId) {
         User creator = userRepository.findById(userId).orElse(null);
         if (creator == null) {
@@ -46,6 +54,12 @@ public class GroupService {
         return groupRepository.save(group);
     }
 
+    /**
+     * Adds a given user to a specific group, if found, matching the code passed.
+     * @param code
+     * @param user
+     * @return
+     */
     public Group joinGroup(String code, User user) {
         Group group = findByCode(code);
         if (group == null) {
@@ -62,6 +76,13 @@ public class GroupService {
         return group;
     }
 
+    /**
+     * Verifies the group and user exists, and that the user is a member of the group, before removing said user from group (and setting owner to null
+     * if the user was the group owner).
+     * @param groupId
+     * @param userId
+     * @return
+     */
     public Group kickMember(int groupId, int userId) {
         Group group = groupRepository.findById(groupId).orElseThrow(() -> new RuntimeException("Group not found"));
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
@@ -81,6 +102,10 @@ public class GroupService {
         return group;
     }
 
+    /**
+     * Delets the group after nulling group fields for its activities and users.
+     * @param groupId
+     */
     @Transactional
     public void deleteGroup(int groupId) {
         Group group = findById(groupId);
@@ -99,6 +124,10 @@ public class GroupService {
         }
     }
 
+    /**
+     * Helper function. Generates a random code, only using the first 6 characters of the generated UUID.
+     * @return
+     */
     private String generateUniqueCode() {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         return uuid.substring(0, 6);

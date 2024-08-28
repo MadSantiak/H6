@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * Controller for API; exposes back-ends for front- to back-end communication used for manipulating User model data.
+ */
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -36,6 +38,12 @@ public class UserController {
         return userService.findById(id);
     }
 
+    /**
+     * Registers the user in the database.
+     * @param email
+     * @param password
+     * @return
+     */
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestParam String email, @RequestParam String password) {
         try {
@@ -46,6 +54,11 @@ public class UserController {
         }
     }
 
+    /**
+     * Fetches the currently logged in users information, based on the token.
+     * @param authToken
+     * @return
+     */
     @GetMapping("/me")
     public ResponseEntity<User> getCurrentUser(@RequestHeader("Authorization") String authToken) {
         try {
@@ -64,7 +77,12 @@ public class UserController {
         }
     }
 
-
+    /**
+     * Logs in the user and supplies their device with an acess and refresh token.
+     * @param email
+     * @param password
+     * @return
+     */
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> loginUser(@RequestParam String email, @RequestParam String password) {
         User user = userService.findByEmail(email);
@@ -81,6 +99,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
 
+    /**
+     * Refreshes access token based on the refresh token.
+     * @param authHeader
+     * @return
+     */
     @PostMapping("/refresh-token")
     public ResponseEntity<String> refreshToken(@RequestHeader("Authorization") String authHeader) {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -101,6 +124,11 @@ public class UserController {
         }
     }
 
+    /**
+     * Deletes the user from the database
+     * @param authHeader
+     * @return
+     */
     @DeleteMapping("/delete")
     public ResponseEntity<Boolean> deleteActivity(@RequestHeader("Authorization") String authHeader) {
         try {

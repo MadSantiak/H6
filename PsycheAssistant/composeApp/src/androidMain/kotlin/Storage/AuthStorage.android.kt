@@ -1,6 +1,10 @@
 package org.psyche.assistant.Storage
 
 import com.tencent.mmkv.MMKV
+import org.psyche.assistant.Storage.AuthStorage.properties
+import org.psyche.assistant.appContext
+import java.io.InputStream
+import java.util.*
 
 /**
  * Auth storage
@@ -9,9 +13,17 @@ import com.tencent.mmkv.MMKV
  * @constructor Create empty Auth storage
  */
 actual object AuthStorage {
-    // To-do: Store separately.
-    private const val AUTH_TOKEN_KEY = "auth_token"
-    private const val REFRESH_TOKEN_KEY = "refresh_token"
+    private val properties: Properties = Properties().apply {
+        val inputStream: InputStream = appContext.assets.open("service.properties")
+        load(inputStream)
+    }
+
+    val AUTH_TOKEN_KEY: String by lazy {
+        properties.getProperty("auth_token")
+    }
+    val REFRESH_TOKEN_KEY: String by lazy {
+        properties.getProperty("refresh_token")
+    }
 
     actual fun saveAuthToken(token: String) {
         MMKV.defaultMMKV().encode(AUTH_TOKEN_KEY, token)
