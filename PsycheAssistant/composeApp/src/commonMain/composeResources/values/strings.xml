@@ -99,4 +99,5 @@
     <string name="description">Description</string>
     <string name="missing_group_warning">Please log in and create or join a group before creating an activity.</string>
     <string name="weekly_overview">Weekly overview</string>
+    <string name="done">Done</string>
 </resources>

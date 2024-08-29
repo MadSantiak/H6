@@ -18,6 +18,7 @@ import network.chaintech.kmp_date_time_picker.ui.datepicker.WheelDatePickerView
 import network.chaintech.kmp_date_time_picker.utils.DateTimePickerView
 import org.jetbrains.compose.resources.stringResource
 import psycheassistant.composeapp.generated.resources.Res
+import psycheassistant.composeapp.generated.resources.done
 import psycheassistant.composeapp.generated.resources.select_date
 import psycheassistant.composeapp.generated.resources.selected_date
 
@@ -58,7 +59,8 @@ fun DatePickerComponent(
                 showDatePicker = showDatePicker,
                 rowCount = 5,
                 height = 200.dp,
-                title = "Select Date",
+                title = stringResource(Res.string.select_date),
+                doneLabel = stringResource(Res.string.done),
                 dateTimePickerView = DateTimePickerView.DIALOG_VIEW,
                 dragHandle = {
                     TabRowDefaults.Divider(
