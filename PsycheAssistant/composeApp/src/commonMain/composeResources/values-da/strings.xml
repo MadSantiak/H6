@@ -97,4 +97,5 @@
     <string name="description">Beskrivelse</string>
     <string name="missing_group_warning">Venligst log ind og opret eller deltag i en gruppe, før du opretter aktiviteter.</string>
     <string name="weekly_overview">Ugentlig oversigt</string>
+    <string name="done">Fuldfør</string>
 </resources>
