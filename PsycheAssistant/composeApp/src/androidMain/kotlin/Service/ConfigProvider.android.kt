@@ -12,4 +12,11 @@ actual object ConfigProvider {
 
     actual val baseUrl: String by lazy {
         properties.getProperty("BASE_URL")
-    }}
+    }
+    actual val secondaryUrl: String? by lazy {
+        properties.getProperty("SECONDARY_URL")
+    }
+    actual val tertiaryUrl: String? by lazy {
+        properties.getProperty("TERTIARY_URL")
+    }
+}

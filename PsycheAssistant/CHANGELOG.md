@@ -2,11 +2,16 @@
 - - -
 
 > ### Author: Mads Søndergaard 
-> ### Current version: 0.2.2
+> ### Current version: 0.2.3
 > ### License: AGPL
 - - -
 
 ## Version history:
+### 0.2.3: 
+> General
+> - POST HAND-IN ADDITIONS FROM HEREON OUT
+> - Added ability to use ngrok to reach self-hosted private server while abroad.
+
 ### 0.2.2:
 > General
 > - Moved sensitive information to separate properties files.
